@@ -7,13 +7,11 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* 基礎欄位定義：時間欄固定 90px，其餘 7 天平分 */
         .timetable-main-grid {
             display: grid;
             grid-template-columns: 90px repeat(7, minmax(120px, 1fr));
             position: relative;
         }
-        /* 每個半小時格子的定位線與高度基準 */
         .time-slot-row {
             height: 60px;
         }
@@ -23,6 +21,10 @@
 
     <div class="max-w-7xl mx-auto space-y-6">
         
+        <div class="w-full text-center my-2 min-h-[90px] bg-slate-100/50 dark:bg-slate-900/50 rounded-xl flex items-center justify-center border border-dashed border-slate-300 dark:border-slate-700 text-xs text-slate-400">
+            廣告贊助 / Advertisements
+            </div>
+
         <div class="flex flex-wrap justify-end items-center gap-3">
             <button onclick="toggleDarkMode()" id="btn-dark" class="px-4 py-1.5 text-xs font-semibold rounded-xl border border-slate-300 bg-slate-900 text-white cursor-pointer flex items-center gap-1.5 shadow-sm hover:scale-105 transition">
                 🌙 <span id="txt-dark-btn">黑夜模式</span>
@@ -99,23 +101,25 @@
                 </div>
             </div>
         </div>
+
+        <div class="w-full text-center my-4 min-h-[90px] bg-slate-100/50 dark:bg-slate-900/50 rounded-xl flex items-center justify-center border border-dashed border-slate-300 dark:border-slate-700 text-xs text-slate-400">
+            廣告贊助 / Advertisements
+            </div>
+
     </div>
 
     <div id="courseModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
         <div id="modalBox" class="bg-white rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-slate-200 text-slate-900">
             <h3 id="modal-title" class="text-xl font-extrabold mb-5">➕ 新增行程資料</h3>
-            
             <div class="space-y-5">
                 <div>
                     <label id="modal-label-name" class="block text-sm font-semibold text-slate-500 mb-1.5">項目 / 行程名稱</label>
                     <input type="text" id="modalCourseName" class="w-full px-3 py-3 border border-slate-300 rounded-xl bg-white text-slate-900 text-sm">
                 </div>
-
                 <div>
                     <label id="modal-label-color" class="block text-sm font-semibold text-slate-500 mb-1.5">選擇行程顏色</label>
                     <div id="colorPickerContainer" class="flex flex-wrap gap-2.5 py-1 max-w-[360px]"></div>
                 </div>
-
                 <div>
                     <label id="modal-label-day" class="block text-sm font-semibold text-slate-500 mb-1.5">星期幾</label>
                     <select id="modalCourseDay" class="w-full px-3 py-3 border border-slate-300 rounded-xl bg-white text-sm">
@@ -128,7 +132,6 @@
                         <option value="7">星期日 (Sun)</option>
                     </select>
                 </div>
-
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label id="modal-label-start" class="block text-sm font-semibold text-slate-500 mb-1.5">開始時間</label>
@@ -139,7 +142,6 @@
                         <select id="modalEndTime" class="w-full px-3 py-3 border border-slate-300 rounded-xl bg-white text-sm"></select>
                     </div>
                 </div>
-
                 <div class="flex gap-3 pt-3">
                     <button onclick="closeModal()" id="btn-modal-cancel" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-3 rounded-xl text-sm transition">取消</button>
                     <button onclick="saveModalCourse()" id="btn-modal-confirm" class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm transition shadow">確認加入</button>
@@ -216,8 +218,7 @@
         const filterEndSel = document.getElementById('filterEndTime');
         
         function formatTime(val) {
-            let h = Math.floor(val);
-            let m = (val % 1 === 0) ? '00' : '30';
+            let h = Math.floor(val); let m = (val % 1 === 0) ? '00' : '30';
             return `${h < 10 ? '0' + h : h}:${m}`;
         }
 
@@ -255,7 +256,7 @@
                 startSelect.options.add(new Option(formatTime(i), i));
                 filterStartSel.options.add(new Option(formatTime(i), i));
             }
-            for(let i = 0.5; i <= 24; i += 0.5) {
+            for(let i = 0; i <= 24; i += 0.5) {
                 filterEndSel.options.add(new Option(formatTime(i), i));
             }
             filterStartSel.value = displayStart; filterEndSel.value = displayEnd;
@@ -364,7 +365,6 @@
                     let startIdx = Math.max(0, (course.start - displayStart) / 0.5);
                     let endIdx = Math.min(timeTracks.length, (course.end - displayStart) / 0.5);
                     let targetCol = 0;
-                    
                     while (true) {
                         let conflict = false;
                         for (let i = startIdx; i < endIdx; i++) {
@@ -393,12 +393,8 @@
                     
                     const card = document.createElement('div');
                     card.className = 'p-1 pointer-events-none';
-                    card.style.gridColumn = `${day + 1}`;
-                    card.style.gridRow = `${gridStartRow} / ${gridEndRow}`;
-                    card.style.zIndex = "10";
-
-                    card.style.display = 'flex';
-                    card.style.justifyContent = 'stretch';
+                    card.style.gridColumn = `${day + 1}`; card.style.gridRow = `${gridStartRow} / ${gridEndRow}`;
+                    card.style.zIndex = "10"; card.style.display = 'flex'; card.style.justifyContent = 'stretch';
                     card.style.paddingLeft = `${(course._tempCol / course._tempMaxCols) * 100}%`;
                     card.style.paddingRight = `${((course._tempMaxCols - course._tempCol - 1) / course._tempMaxCols) * 100}%`;
 
@@ -418,6 +414,7 @@
 
         function deleteCourse(id) { courses = courses.filter(c => c.id !== id); updateUI(); }
         function clearAllCourses() { if (confirm(langPack[currentLang].confirmClear)) { courses = []; updateUI(); } }
+        
         function exportJSON() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(courses));
             const dl = document.createElement('a'); dl.setAttribute("href", dataStr); dl.setAttribute("download", "timetable_backup.json");
