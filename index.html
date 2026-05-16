@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>自訂行程時間表 / Weekly Schedule Planner</title>
     
+    <title>2026自訂行程時間表 - 免費線上每週課表/兼職/計畫表產生器</title>
+    <meta name="description" content="最方便的免費線上自訂行程時間表！支援直接點擊網格新增行程、12色分類、黑夜模式，並提供繁體中文、英文等多語言切換。一鍵下載高清時間表截圖，輕鬆規劃大學課表、兼職時間與每週計畫！">
+    <meta name="keywords" content="時間表, 課表產生器, 行程規劃, 每週計畫表, 自訂時間表, 大學課表, timetable, schedule planner">
+
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1541687790282612" crossorigin="anonymous"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -108,6 +111,11 @@
         <div class="w-full text-center my-4 min-h-[90px] bg-slate-100/50 dark:bg-slate-900/50 rounded-xl flex items-center justify-center border border-dashed border-slate-300 dark:border-slate-700 text-xs text-slate-400">
             廣告贊助 / Advertisements
         </div>
+
+        <footer id="seo-footer" class="mt-12 pt-6 border-t border-slate-200 dark:border-slate-800 text-slate-400 dark:text-slate-500 text-xs space-y-2">
+            <p>關於「自訂行程時間表 / Weekly Schedule Planner」：這是一款專為大學生、斜槓族、兼職人員設計的線上免安裝工具。無論你需要規劃大學課表、備忘錄 To-Do List、兼職排班還是個人溫習時間表，都能透過直覺的網格點擊輕鬆完成。</p>
+            <p>核心功能包含：12色精美主題分類、自動偵測時間重疊（並排大格顯示與紅框警示）、一鍵備份及匯入 JSON 資料。此外，網頁全面支援 RWD 手機版操作、一鍵切換黑夜模式，並可直接下載高清 PNG 截圖存作手機桌布，是提升每週時間管理效率的最佳工具。</p>
+        </footer>
 
     </div>
 
@@ -385,7 +393,7 @@
                     let endIdx = Math.min(timeTracks.length, (course.end - displayStart) / 0.5);
                     let maxColsInRegion = 1;
                     for (let i = startIdx; i < endIdx; i++) {
-                        maxColsInRegion = Math.max(maxColsInRegion, timeTracks[i].filter(Boolean).length);maxColsInRegion = Math.max(maxColsInRegion, timeTracks[i].filter(Boolean).length);
+                        maxColsInRegion = Math.max(maxColsInRegion, timeTracks[i].filter(Boolean).length);
                     }
                     course._tempMaxCols = maxColsInRegion;
                 });
