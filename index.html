@@ -13,40 +13,44 @@
         }
     </style>
 </head>
-<body class="bg-slate-50 font-sans p-4 md:p-6">
+<body id="body" class="bg-slate-50 text-slate-800 font-sans p-4 md:p-6 transition-colors duration-200">
 
     <div class="max-w-7xl mx-auto">
         
-        <div class="flex justify-end gap-2 mb-4">
+        <div class="flex flex-wrap justify-end items-center gap-2 mb-4">
+            <button onclick="toggleDarkMode()" id="btn-dark" class="px-3 py-1 text-xs font-medium rounded-lg border bg-slate-800 text-white dark:bg-white dark:text-slate-800 cursor-pointer flex items-center gap-1 mr-2">
+                🌙 <span id="txt-dark-btn">黑夜模式</span>
+            </button>
+            <div class="h-4 w-[1px] bg-slate-300 mr-2"></div>
             <button onclick="changeLang('zh')" id="btn-zh" class="px-3 py-1 text-xs font-medium rounded-lg border bg-blue-600 text-white cursor-pointer">繁體中文</button>
             <button onclick="changeLang('cn')" id="btn-cn" class="px-3 py-1 text-xs font-medium rounded-lg border bg-white text-slate-600 hover:bg-slate-100 cursor-pointer">简体中文</button>
             <button onclick="changeLang('en')" id="btn-en" class="px-3 py-1 text-xs font-medium rounded-lg border bg-white text-slate-600 hover:bg-slate-100 cursor-pointer">English</button>
         </div>
 
         <div class="text-center mb-6">
-            <h1 id="txt-title" class="text-3xl font-bold text-slate-800 mb-2">📅 自訂行程時間表</h1>
-            <p id="txt-subtitle" class="text-slate-600">網格支援【直接點擊】！輕鬆規劃你的完美每週行程！</p>
+            <h1 id="txt-title" class="text-3xl font-bold text-slate-800 dark:text-slate-100 mb-2">📅 自訂行程時間表</h1>
+            <p id="txt-subtitle" class="text-slate-600 dark:text-slate-400">網格支援【直接點擊】！輕鬆規劃你的完美每週行程！</p>
         </div>
 
         <div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
             <div class="space-y-4 xl:col-span-1">
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                    <h3 id="txt-filter-title" class="text-sm font-bold text-slate-700 mb-3">⏰ 顯示時間範圍 (24h)</h3>
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
+                    <h3 id="txt-filter-title" class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">⏰ 顯示時間範圍 (24h)</h3>
                     <div class="grid grid-cols-2 gap-2 text-xs">
                         <div>
-                            <label id="lbl-filter-start" class="block text-slate-500 mb-1">開始</label>
-                            <select id="filterStartTime" onchange="updateTimeFilter()" class="w-full px-2 py-1.5 border border-slate-200 rounded-lg bg-slate-50"></select>
+                            <label id="lbl-filter-start" class="block text-slate-500 dark:text-slate-400 mb-1">開始</label>
+                            <select id="filterStartTime" onchange="updateTimeFilter()" class="w-full px-2 py-1.5 border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200"></select>
                         </div>
                         <div>
-                            <label id="lbl-filter-end" class="block text-slate-500 mb-1">結束</label>
-                            <select id="filterEndTime" onchange="updateTimeFilter()" class="w-full px-2 py-1.5 border border-slate-200 rounded-lg bg-slate-50"></select>
+                            <label id="lbl-filter-end" class="block text-slate-500 dark:text-slate-400 mb-1">結束</label>
+                            <select id="filterEndTime" onchange="updateTimeFilter()" class="w-full px-2 py-1.5 border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200"></select>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 h-fit">
-                    <h2 id="txt-list-title" class="text-xl font-bold text-slate-700 mb-2">📝 我的每週行程一覽</h2>
-                    <p id="txt-list-tip" class="text-xs text-slate-400 mb-4">💡 提示：點擊時間表任意空格即可彈出視窗加入行程。</p>
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 h-fit">
+                    <h2 id="txt-list-title" class="text-xl font-bold text-slate-700 dark:text-slate-200 mb-2">📝 我的每週行程一覽</h2>
+                    <p id="txt-list-tip" class="text-xs text-slate-400 dark:text-slate-500 mb-4">💡 提示：點擊時間表任意空格即可彈出視窗加入行程。</p>
                     <ul id="courseList" class="space-y-2 max-h-72 overflow-y-auto text-xs">
                         </ul>
                 </div>
@@ -54,44 +58,44 @@
 
             <div class="xl:col-span-3">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
-                    <span id="txt-clash-alert" class="text-xs text-slate-500">⚠️ 同一時段重複加行程會觸發紅色撞時間警告。</span>
-                    <button onclick="downloadTimetable()" id="btn-screenshot" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition cursor-pointer text-center">
+                    <span id="txt-clash-alert" class="text-xs text-slate-500 dark:text-slate-400">⚠️ 同一時段重複加行程會觸發紅色撞時間警告。</span>
+                    <button onclick="downloadTimetable()" id="btn-screenshot" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition cursor-pointer text-center border-none">
                         📸 下載時間表截圖
                     </button>
                 </div>
 
-                <div id="timetableCapture" class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 overflow-x-auto">
-                    <div class="timetable-grid border-b border-slate-200 pb-2 text-center font-bold text-slate-700 text-xs gap-1">
+                <div id="timetableCapture" class="bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-x-auto">
+                    <div class="timetable-grid border-b border-slate-200 dark:border-slate-700 pb-2 text-center font-bold text-slate-700 dark:text-slate-300 text-xs gap-1">
                         <div id="th-time">時間</div>
-                        <div class="text-blue-600">Mon</div>
-                        <div class="text-blue-600">Tue</div>
-                        <div class="text-blue-600">Wed</div>
-                        <div class="text-blue-600">Thu</div>
-                        <div class="text-blue-600">Fri</div>
-                        <div class="text-amber-600">Sat</div>
-                        <div class="text-amber-600">Sun</div>
+                        <div class="text-blue-600 dark:text-blue-400">Mon</div>
+                        <div class="text-blue-600 dark:text-blue-400">Tue</div>
+                        <div class="text-blue-600 dark:text-blue-400">Wed</div>
+                        <div class="text-blue-600 dark:text-blue-400">Thu</div>
+                        <div class="text-blue-600 dark:text-blue-400">Fri</div>
+                        <div class="text-amber-600 dark:text-amber-400">Sat</div>
+                        <div class="text-amber-600 dark:text-amber-400">Sun</div>
                     </div>
 
-                    <div id="timetableRows" class="divide-y divide-slate-100">
+                    <div id="timetableRows" class="divide-y divide-slate-100 dark:divide-slate-800">
                         </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="courseModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl transform transition-all scale-100">
-            <h3 id="modal-title" class="text-lg font-bold text-slate-800 mb-4">➕ 新增行程資料</h3>
+    <div id="courseModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 max-w-sm w-full shadow-xl border border-slate-100 dark:border-slate-800 transform transition-all scale-100 text-slate-800 dark:text-slate-100">
+            <h3 id="modal-title" class="text-lg font-bold mb-4">➕ 新增行程資料</h3>
             
             <div class="space-y-4">
                 <div>
-                    <label id="modal-label-name" class="block text-sm font-medium text-slate-600 mb-1">項目 / 行程名稱</label>
-                    <input type="text" id="modalCourseName" placeholder="" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <label id="modal-label-name" class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">項目 / 行程名稱</label>
+                    <input type="text" id="modalCourseName" placeholder="" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 dark:text-slate-100">
                 </div>
 
                 <div>
-                    <label id="modal-label-day" class="block text-sm font-medium text-slate-600 mb-1">星期幾</label>
-                    <select id="modalCourseDay" class="w-full px-3 py-2 border border-slate-200 rounded-lg bg-slate-50" disabled>
+                    <label id="modal-label-day" class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">星期幾</label>
+                    <select id="modalCourseDay" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100">
                         <option value="1">星期一 (Mon)</option>
                         <option value="2">星期二 (Tue)</option>
                         <option value="3">星期三 (Wed)</option>
@@ -104,20 +108,20 @@
 
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label id="modal-label-start" class="block text-sm font-medium text-slate-600 mb-1">開始時間</label>
-                        <select id="modalStartTime" class="w-full px-3 py-2 border border-slate-200 rounded-lg bg-slate-50" disabled></select>
+                        <label id="modal-label-start" class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">開始時間</label>
+                        <select id="modalStartTime" onchange="onModalStartChange()" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100"></select>
                     </div>
                     <div>
-                        <label id="modal-label-end" class="block text-sm font-medium text-slate-600 mb-1">結束時間</label>
-                        <select id="modalEndTime" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
+                        <label id="modal-label-end" class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">結束時間</label>
+                        <select id="modalEndTime" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100"></select>
                     </div>
                 </div>
 
                 <div class="flex gap-2 pt-2">
-                    <button onclick="closeModal()" id="btn-modal-cancel" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium py-2 rounded-lg cursor-pointer text-center text-sm">
+                    <button onclick="closeModal()" id="btn-modal-cancel" class="w-1/2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 font-medium py-2 rounded-lg cursor-pointer text-center text-sm border-none">
                         取消
                     </button>
-                    <button onclick="saveModalCourse()" id="btn-modal-confirm" class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg cursor-pointer text-center text-sm">
+                    <button onclick="saveModalCourse()" id="btn-modal-confirm" class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg cursor-pointer text-center text-sm border-none">
                         確認加入
                     </button>
                 </div>
@@ -144,9 +148,12 @@
                 btnConfirm: "確認加入",
                 placeholder: "例如: 補習 / 兼職 / 溫習",
                 alertInput: "請輸入名稱！",
+                alertTimeOrder: "結束時間必須遲過開始時間！",
                 filterTitle: "⏰ 顯示時間範圍 (24h)",
                 filterStart: "開始時間",
                 filterEnd: "結束時間",
+                darkBtnOn: "黑夜模式",
+                darkBtnOff: "白天模式",
                 days: ['', '星期一 (Mon)', '星期二 (Tue)', '星期三 (Wed)', '星期四 (Thu)', '星期五 (Fri)', '星期六 (Sat)', '星期日 (Sun)']
             },
             cn: {
@@ -166,9 +173,12 @@
                 btnConfirm: "确认加入",
                 placeholder: "例如: 补习 / 兼职 / 温习",
                 alertInput: "请输入名称！",
+                alertTimeOrder: "结束时间必须迟过开始时间！",
                 filterTitle: "⏰ 显示时间范围 (24h)",
                 filterStart: "开始时间",
                 filterEnd: "结束时间",
+                darkBtnOn: "黑夜模式",
+                darkBtnOff: "白天模式",
                 days: ['', '星期一 (Mon)', '星期二 (Tue)', '星期三 (Wed)', '星期四 (Thu)', '星期五 (Fri)', '星期六 (Sat)', '星期日 (Sun)']
             },
             en: {
@@ -188,17 +198,20 @@
                 btnConfirm: "Confirm & Add",
                 placeholder: "e.g., Tutor / Part-time / Study",
                 alertInput: "Please enter a name!",
+                alertTimeOrder: "End time must be later than start time!",
                 filterTitle: "⏰ Time Display Range (24h)",
                 filterStart: "Start",
                 filterEnd: "End",
+                darkBtnOn: "Dark Mode",
+                darkBtnOff: "Light Mode",
                 days: ['', 'Monday (Mon)', 'Tuesday (Tue)', 'Wednesday (Wed)', 'Thursday (Thu)', 'Friday (Fri)', 'Saturday (Sat)', 'Sunday (Sun)']
             }
         };
 
         let currentLang = 'zh';
         let courses = [];
+        let isDarkMode = false;
         
-        // 預設篩選時間範圍：09:00 至 21:00
         let displayStart = 9;
         let displayEnd = 21;
 
@@ -213,7 +226,6 @@
             return `${h < 10 ? '0' + h : h}:${m}`;
         }
 
-        // 初始化24小時下拉選單的選項 (00:00 - 24:00)
         function initTimeDropdowns() {
             startSelect.innerHTML = '';
             filterStartSel.innerHTML = '';
@@ -231,12 +243,32 @@
             filterEndSel.value = displayEnd;
         }
 
+        // 黑夜模式切換核心
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            const body = document.getElementById('body');
+            const darkBtnText = document.getElementById('txt-dark-btn');
+            
+            if (isDarkMode) {
+                body.classList.add('dark', 'bg-slate-950');
+                body.classList.remove('bg-slate-50');
+                darkBtnText.innerText = langPack[currentLang].darkBtnOff;
+                document.getElementById('btn-dark').className = "px-3 py-1 text-xs font-medium rounded-lg border bg-white text-slate-800 cursor-pointer flex items-center gap-1 mr-2";
+            } else {
+                body.classList.remove('dark', 'bg-slate-950');
+                body.classList.add('bg-slate-50');
+                darkBtnText.innerText = langPack[currentLang].darkBtnOn;
+                document.getElementById('btn-dark').className = "px-3 py-1 text-xs font-medium rounded-lg border bg-slate-800 text-white cursor-pointer flex items-center gap-1 mr-2";
+            }
+            renderTimetable();
+        }
+
         function updateTimeFilter() {
             let start = parseFloat(filterStartSel.value);
             let end = parseFloat(filterEndSel.value);
             
             if (start >= end) {
-                alert(currentLang === 'en' ? 'End time must be later than start time!' : '結束時間必須遲過開始時間！');
+                alert(langPack[currentLang].alertTimeOrder);
                 filterStartSel.value = displayStart;
                 filterEndSel.value = displayEnd;
                 return;
@@ -262,6 +294,7 @@
             document.getElementById('txt-filter-title').innerText = p.filterTitle;
             document.getElementById('lbl-filter-start').innerText = p.filterStart;
             document.getElementById('lbl-filter-end').innerText = p.filterEnd;
+            document.getElementById('txt-dark-btn').innerText = isDarkMode ? p.darkBtnOff : p.darkBtnOn;
             
             document.getElementById('modal-title').innerText = p.modalTitle;
             document.getElementById('modal-label-name').innerText = p.labelName;
@@ -277,7 +310,9 @@
                 if (l === lang) {
                     btn.className = "px-3 py-1 text-xs font-medium rounded-lg border bg-blue-600 text-white cursor-pointer";
                 } else {
-                    btn.className = "px-3 py-1 text-xs font-medium rounded-lg border bg-white text-slate-600 hover:bg-slate-100 cursor-pointer";
+                    btn.className = isDarkMode 
+                        ? "px-3 py-1 text-xs font-medium rounded-lg border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer"
+                        : "px-3 py-1 text-xs font-medium rounded-lg border bg-white text-slate-600 hover:bg-slate-100 cursor-pointer";
                 }
             });
 
@@ -289,15 +324,29 @@
             updateUI();
         }
 
-        function openModal(day, timeValue) {
-            document.getElementById('modalCourseDay').value = day;
-            document.getElementById('modalStartTime').value = timeValue;
+        // 當用家在彈出視窗手動更改「開始時間」時，動態更新「結束時間」的選項範圍
+        function onModalStartChange() {
+            const currentStart = parseFloat(startSelect.value);
+            const savedEndValue = parseFloat(endSelect.value);
             
             endSelect.innerHTML = '';
-            for(let i = timeValue + 0.5; i <= 24; i += 0.5) {
+            for(let i = currentStart + 0.5; i <= 24; i += 0.5) {
                 endSelect.options.add(new Option(formatTime(i), i));
             }
-            endSelect.value = timeValue + 1.0 <= 24 ? timeValue + 1.0 : timeValue + 0.5;
+            
+            if (savedEndValue > currentStart) {
+                endSelect.value = savedEndValue;
+            } else {
+                endSelect.value = currentStart + 1.0 <= 24 ? currentStart + 1.0 : currentStart + 0.5;
+            }
+        }
+
+        function openModal(day, timeValue) {
+            document.getElementById('modalCourseDay').value = day;
+            startSelect.value = timeValue; // 現在可以自由點選了
+            
+            // 重新填裝結束時間範圍並自動選擇下一格
+            onModalStartChange();
 
             document.getElementById('courseModal').classList.remove('hidden');
             document.getElementById('modalCourseName').focus();
@@ -311,11 +360,15 @@
         function saveModalCourse() {
             const name = document.getElementById('modalCourseName').value.trim();
             const day = document.getElementById('modalCourseDay').value;
-            const start = parseFloat(document.getElementById('modalStartTime').value);
-            const end = parseFloat(document.getElementById('modalEndTime').value);
+            const start = parseFloat(startSelect.value);
+            const end = parseFloat(endSelect.value);
 
             if (!name) {
                 alert(langPack[currentLang].alertInput);
+                return;
+            }
+            if (start >= end) {
+                alert(langPack[currentLang].alertTimeOrder);
                 return;
             }
 
@@ -328,13 +381,12 @@
             const rowsContainer = document.getElementById('timetableRows');
             rowsContainer.innerHTML = '';
 
-            // 根據用家設定的顯示範圍動態渲染
             for (let time = displayStart; time < displayEnd; time += 0.5) {
                 const row = document.createElement('div');
                 row.className = 'timetable-grid min-h-[45px] items-stretch text-center text-[11px] gap-1';
                 
                 const timeLabel = document.createElement('div');
-                timeLabel.className = 'flex items-center justify-center border-r border-slate-100 text-slate-400 font-mono bg-slate-50';
+                timeLabel.className = 'flex items-center justify-center border-r border-slate-100 dark:border-slate-800 text-slate-400 dark:text-slate-500 font-mono bg-slate-50 dark:bg-slate-900/50';
                 timeLabel.innerText = formatTime(time);
                 row.appendChild(timeLabel);
 
@@ -348,18 +400,24 @@
                         if (slotCourses.length > 1) {
                             slotCourses.forEach(c => {
                                 const subItem = document.createElement('div');
-                                subItem.className = 'flex-1 bg-red-100 text-red-800 border border-red-300 rounded flex items-center justify-center p-1 font-medium truncate';
+                                // 黑夜與白天的撞時間紅色樣式優化
+                                subItem.className = isDarkMode 
+                                    ? 'flex-1 bg-red-950/80 text-red-300 border border-red-900 rounded flex items-center justify-center p-1 font-medium truncate'
+                                    : 'flex-1 bg-red-100 text-red-800 border border-red-300 rounded flex items-center justify-center p-1 font-medium truncate';
                                 subItem.innerHTML = `<span>${c.name}</span>`;
                                 cell.appendChild(subItem);
                             });
                         } else {
                             const subItem = document.createElement('div');
-                            subItem.className = 'flex-1 bg-blue-50 text-blue-700 border border-blue-100 rounded flex items-center justify-center p-1 font-medium truncate';
+                            // 黑夜與白天的常規行程藍色樣式優化
+                            subItem.className = isDarkMode
+                                ? 'flex-1 bg-blue-950/60 text-blue-300 border border-blue-900 rounded flex items-center justify-center p-1 font-medium truncate'
+                                : 'flex-1 bg-blue-50 text-blue-700 border border-blue-100 rounded flex items-center justify-center p-1 font-medium truncate';
                             subItem.innerHTML = `<span>${slotCourses[0].name}</span>`;
                             cell.appendChild(subItem);
                         }
                     } else {
-                        cell.className = 'p-1 hover:bg-slate-100 text-transparent hover:text-slate-400 transition cursor-pointer flex items-center justify-center border border-dashed border-slate-100 rounded min-h-[40px]';
+                        cell.className = 'p-1 hover:bg-slate-100 dark:hover:bg-slate-800 text-transparent hover:text-slate-400 dark:hover:text-slate-500 transition cursor-pointer flex items-center justify-center border border-dashed border-slate-100 dark:border-slate-800 rounded min-h-[40px]';
                         cell.innerText = '＋';
                         cell.setAttribute('onclick', `openModal(${day}, ${time})`);
                     }
@@ -381,10 +439,10 @@
             
             courses.forEach(c => {
                 const li = document.createElement('li');
-                li.className = 'flex justify-between items-center bg-slate-100 p-2 rounded-lg';
+                li.className = 'flex justify-between items-center bg-slate-100 dark:bg-slate-800 p-2 rounded-lg text-slate-800 dark:text-slate-200';
                 li.innerHTML = `
-                    <span class="truncate mr-1"><strong>${c.name}</strong><br><span class="text-slate-500">${langPack[currentLang].days[c.day]} ${formatTime(c.start)}-${formatTime(c.end)}</span></span>
-                    <button onclick="deleteCourse(${c.id})" class="text-red-500 hover:text-red-700 font-bold px-1 cursor-pointer">❌</button>
+                    <span class="truncate mr-1"><strong>${c.name}</strong><br><span class="text-slate-500 dark:text-slate-400">${langPack[currentLang].days[c.day]} ${formatTime(c.start)}-${formatTime(c.end)}</span></span>
+                    <button onclick="deleteCourse(${c.id})" class="text-red-500 hover:text-red-700 font-bold px-1 cursor-pointer border-none bg-transparent">❌</button>
                 `;
                 list.appendChild(li);
             });
@@ -400,7 +458,6 @@
             });
         }
 
-        // 初始化
         initTimeDropdowns();
         changeLang('zh');
     </script>
