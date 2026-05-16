@@ -7,7 +7,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* 整體大網格設計：縱向可以自由跨行 */
         .timetable-main-grid {
             display: grid;
             grid-template-columns: 90px repeat(7, minmax(110px, 1fr));
@@ -79,13 +78,11 @@
             </div>
 
             <div id="timetableCapture" class="bg-white p-5 rounded-2xl shadow-md border border-slate-200/80 overflow-x-auto w-full transition-all">
-                
                 <div class="timetable-main-grid min-w-[860px]">
-                    
                     <div id="th-time" class="p-2.5 text-center font-extrabold text-slate-500 border-b border-slate-200 text-xs sm:text-sm">時間</div>
-                    <div id="th-mon" class="p-2.5 text-center font-bold text-blue-600 border-b border-slate-200 text-xs sm:text-sm">Mon</div>
-                    <div id="th-tue" class="p-2.5 text-center font-bold text-blue-600 border-b border-slate-200 text-xs sm:text-sm">Tue</div>
-                    <div id="th-wed" class="p-2.5 text-center font-bold text-blue-600 border-b border-slate-200 text-xs sm:text-sm">Wed</div>
+                    <div id="th-mon" class="p-2.5 text-center font-bold text-slate-900 border-b border-slate-200 text-xs sm:text-sm">Mon</div>
+                    <div id="th-tue" class="p-2.5 text-center font-bold text-slate-900 border-b border-slate-200 text-xs sm:text-sm">Tue</div>
+                    <div id="th-wed" class="p-2.5 text-center font-bold text-slate-900 border-b border-slate-200 text-xs sm:text-sm">Wed</div>
                     <div id="th-thu" class="p-2.5 text-center font-bold text-slate-700 border-b border-slate-200 text-xs sm:text-sm">Thu</div>
                     <div id="th-fri" class="p-2.5 text-center font-bold text-slate-700 border-b border-slate-200 text-xs sm:text-sm">Fri</div>
                     <div id="th-sat" class="p-2.5 text-center font-bold text-amber-600 border-b border-slate-200 text-xs sm:text-sm">Sat</div>
@@ -93,7 +90,6 @@
 
                     <div id="timetableGridBody" class="contents">
                         </div>
-
                 </div>
             </div>
         </div>
@@ -350,8 +346,6 @@
             const panelNotes = document.getElementById('panel-notes');
             const notesTitle = document.getElementById('txt-notes-title');
 
-            const borderClass = isDarkMode ? 'border-slate-800' : 'border-slate-200';
-
             if (isDarkMode) {
                 body.className = "bg-slate-950 text-white font-sans p-3 sm:p-6 md:p-8 transition-colors duration-200 min-h-screen";
                 btnDark.className = "px-4 py-1.5 text-xs font-semibold rounded-xl border border-slate-700 bg-white text-black cursor-pointer flex items-center gap-1.5 shadow-sm hover:scale-105 transition";
@@ -371,10 +365,9 @@
                 listTitle.className = "text-base font-bold mb-1 text-white";
                 notesTitle.className = "text-base font-bold mb-1.5 text-white";
 
-                // 黑夜模式表頭文字修正為高亮白
                 ['time', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].forEach(d => {
                     const el = document.getElementById(`th-${d}`);
-                    el.className = `p-2.5 text-center font-bold text-white border-b border-slate-800 text-xs sm:text-sm ${d==='time'?'font-extrabold':''}`;
+                    if (el) el.className = `p-2.5 text-center font-bold text-white border-b border-slate-800 text-xs sm:text-sm ${d=='time'?'font-extrabold':''}`;
                 });
             } else {
                 body.className = "bg-slate-50 text-slate-900 font-sans p-3 sm:p-6 md:p-8 transition-colors duration-200 min-h-screen";
@@ -396,7 +389,8 @@
                 notesTitle.className = "text-base font-bold mb-1.5 text-slate-900";
 
                 document.getElementById('th-time').className = "p-2.5 text-center font-extrabold text-slate-500 border-b border-slate-200 text-xs sm:text-sm";
-                ['mon', 'tue', 'wed'].forEach(d => document.getElementById(`th-${d}`).className = "p-2.5 text-center font-bold text-blue-600 border-b border-slate-200 text-xs sm:text-sm");
+                // 【白天模式修正】：將 Mon, Tue, Wed 統一調整為更沉穩的黑色 text-slate-900
+                ['mon', 'tue', 'wed'].forEach(d => document.getElementById(`th-${d}`).className = "p-2.5 text-center font-bold text-slate-900 border-b border-slate-200 text-xs sm:text-sm");
                 ['thu', 'fri'].forEach(d => document.getElementById(`th-${d}`).className = "p-2.5 text-center font-bold text-slate-700 border-b border-slate-200 text-xs sm:text-sm");
                 ['sat', 'sun'].forEach(d => document.getElementById(`th-${d}`).className = "p-2.5 text-center font-bold text-amber-600 border-b border-slate-200 text-xs sm:text-sm");
             }
@@ -611,37 +605,35 @@
             const gridBody = document.getElementById('timetableGridBody');
             gridBody.innerHTML = '';
 
-            // 計算出目前一共有多少個半小時的「時間橫列數」
-            const totalRows = (displayEnd - displayStart) / 0.5;
             const borderStyle = isDarkMode ? 'border-slate-800' : 'border-slate-200/60';
-
-            // 1. 先用二維物件陣列記錄哪些格位將被跨行行程佔用，避免重複繪製
             const cellOccupied = {};
-
-            // 2. 依照時間主軸，一列一列計算並丟進 Grid
-            let rowIndex = 2; // Grid row index 從 2 開始 (1 是表頭)
+            let rowIndex = 2; 
             
-            for (let time = displayStart; time < displayEnd; time += 0.5) {
-                
-                // 渲染左側時間欄
-                const timeLabel = document.createElement('div');
-                timeLabel.className = isDarkMode
-                    ? 'flex items-center justify-center p-2 border-b border-r border-slate-800 text-white font-mono font-bold bg-slate-950/80 min-h-[55px]'
-                    : 'flex items-center justify-center p-2 border-b border-r border-slate-200/60 text-slate-500 font-mono font-bold bg-slate-50/50 min-h-[55px]';
-                timeLabel.style.gridColumn = "1";
-                timeLabel.style.gridRow = `${rowIndex}`;
-                timeLabel.innerText = formatTime(time);
-                gridBody.appendChild(timeLabel);
+            for (let time = displayStart; time <= displayEnd; time += 0.5) {
+                const isLastRow = (time === displayEnd);
 
-                // 循環週一至週日
+                if (!isLastRow) {
+                    const timeLabel = document.createElement('div');
+                    timeLabel.className = isDarkMode
+                        ? 'flex items-center justify-center p-2 border-b border-r border-slate-800 text-white font-mono font-bold bg-slate-950/80 min-h-[55px]'
+                        : 'flex items-center justify-center p-2 border-b border-r border-slate-200/60 text-slate-500 font-mono font-bold bg-slate-50/50 min-h-[55px]';
+                    timeLabel.style.gridColumn = "1";
+                    timeLabel.style.gridRow = `${rowIndex}`;
+                    timeLabel.innerText = formatTime(time);
+                    gridBody.appendChild(timeLabel);
+                }
+
                 for (let day = 1; day <= 7; day++) {
                     const cellKey = `${day}-${time}`;
                     
                     if (cellOccupied[cellKey]) {
-                        continue; // 如果這個位置被之前的長行程跨行吃掉了，直接跳過不畫
+                        continue; 
                     }
 
-                    // 找出符合目前時間格的行程
+                    if (isLastRow) {
+                        continue; 
+                    }
+
                     const slotCourses = courses.filter(c => c.day == day && time >= c.start && time < c.end).sort((a,b) => a.id - b.id);
                     
                     const cell = document.createElement('div');
@@ -650,58 +642,52 @@
                     cell.style.gridColumn = `${day + 1}`;
 
                     if (slotCourses.length > 0) {
-                        const anyClashInGroup = slotCourses.some(c => checkIsClashed(c));
+                        const mainCourse = slotCourses[0];
+                        const anyClashInGroup = slotCourses.length > 1 || checkIsClashed(mainCourse);
 
-                        if (anyClashInGroup) {
-                            // 發生撞時間：在當前這個半小時格子內並排顯示
-                            cell.className = `p-1 flex flex-row items-stretch justify-center gap-1 border-b ${borderStyle} min-h-[55px]`;
-                            cell.style.gridRow = `${rowIndex}`;
+                        if (time === Math.max(mainCourse.start, displayStart)) {
+                            const renderStart = Math.max(mainCourse.start, displayStart);
+                            const renderEnd = Math.min(mainCourse.end, displayEnd);
+                            const slotsCount = (renderEnd - renderStart) / 0.5;
 
-                            slotCourses.forEach(c => {
-                                const subItem = document.createElement('div');
+                            cell.style.gridRow = `${rowIndex} / span ${slotsCount}`;
+                            cell.className = `p-1 flex flex-col items-slate-stretch justify-center border-b ${borderStyle}`;
+
+                            for (let t = renderStart; t < renderEnd; t += 0.5) {
+                                cellOccupied[`${day}-${t}`] = true;
+                            }
+
+                            const subItem = document.createElement('div');
+                            
+                            if (anyClashInGroup) {
                                 subItem.className = isDarkMode 
-                                    ? 'flex-1 bg-red-950/90 text-red-200 border border-red-700 rounded-xl flex items-center justify-center p-1 font-bold text-center cursor-pointer shadow-sm hover:scale-[1.02] transition-all break-all text-[11px]'
-                                    : 'flex-1 bg-red-50 text-red-700 border border-red-200 rounded-xl flex items-center justify-center p-1 font-bold text-center cursor-pointer shadow-md hover:scale-[1.02] transition-all break-all text-[11px]';
-                                subItem.innerHTML = `<span>${c.name}</span>`;
-                                subItem.setAttribute('onclick', `openModal(null, null, ${c.id})`);
-                                cell.appendChild(subItem);
-                            });
-                        } else {
-                            // 無撞時間：完美啟用大網格縱向跨行伸展 (Span)！
-                            const c = slotCourses[0];
-                            if (time === Math.max(c.start, displayStart)) {
-                                const renderStart = Math.max(c.start, displayStart);
-                                const renderEnd = Math.min(c.end, displayEnd);
-                                const slotsCount = (renderEnd - renderStart) / 0.5;
-
-                                cell.style.gridRow = `${rowIndex} / span ${slotsCount}`;
-                                cell.className = `p-1 flex flex-col items-stretch justify-center border-b ${borderStyle}`;
-
-                                // 標記被這個行程吃掉的未來時段格子
-                                for (let t = renderStart; t < renderEnd; t += 0.5) {
-                                    cellOccupied[`${day}-${t}`] = true;
-                                }
-
-                                const subItem = document.createElement('div');
-                                const themeColors = colorPalette[c.colorIndex || 0];
+                                    ? 'w-full h-full bg-red-950/90 text-red-200 border-2 border-red-500 rounded-xl flex items-center justify-center p-2 font-bold text-center cursor-pointer shadow-md hover:scale-[1.01] transition-all break-all min-h-[46px]'
+                                    : 'w-full h-full bg-red-50 text-red-700 border-2 border-red-400 rounded-xl flex items-center justify-center p-2 font-bold text-center cursor-pointer shadow-md hover:scale-[1.01] transition-all break-all min-h-[46px]';
+                            } else {
+                                const themeColors = colorPalette[mainCourse.colorIndex || 0];
                                 const currentThemeClass = isDarkMode ? themeColors.dark : themeColors.light;
-
                                 subItem.className = `w-full h-full border rounded-xl flex items-center justify-center p-2 font-bold text-center cursor-pointer shadow-md hover:scale-[1.01] transition-all break-all min-h-[46px]`;
                                 subItem.classList.add(...currentThemeClass.split(' '));
-                                subItem.innerHTML = `<span>${c.name}</span>`;
-                                subItem.setAttribute('onclick', `openModal(null, null, ${c.id})`);
-                                cell.appendChild(subItem);
-                            } else {
-                                continue;
                             }
+
+                            subItem.innerHTML = `<span>${mainCourse.name}</span>`;
+                            subItem.setAttribute('onclick', `openModal(null, null, ${mainCourse.id})`);
+                            cell.appendChild(subItem);
+                        } else {
+                            continue;
                         }
                     } else {
-                        // 空白單元格
-                        cell.className = isDarkMode
-                            ? `p-1 hover:bg-slate-800 text-transparent hover:text-white transition-all cursor-pointer flex items-center justify-center border-b border-r ${borderStyle} min-h-[55px] font-extrabold text-base`
-                            : `p-1 hover:bg-slate-100 text-transparent hover:text-slate-400 transition-all cursor-pointer flex items-center justify-center border-b border-r ${borderStyle} min-h-[55px] font-extrabold text-base`;
-                        cell.innerText = '＋';
-                        cell.setAttribute('onclick', `openModal(${day}, ${time})`);
+                        cell.className = `p-1 border-b border-r ${borderStyle} min-h-[55px] flex items-slate-stretch justify-center`;
+                        cell.style.gridRow = `${rowIndex}`;
+
+                        const addBtn = document.createElement('div');
+                        addBtn.className = isDarkMode
+                            ? 'w-full h-full hover:bg-slate-800 text-transparent hover:text-white transition-all cursor-pointer flex items-center justify-center border border-dashed border-slate-800 hover:border-slate-600 rounded-xl font-extrabold text-base'
+                            : 'w-full h-full hover:bg-slate-100 text-transparent hover:text-slate-400 transition-all cursor-pointer flex items-center justify-center border border-dashed border-slate-200 hover:border-slate-400 rounded-xl font-extrabold text-base';
+                        addBtn.innerText = '＋';
+                        addBtn.setAttribute('onclick', `openModal(${day}, ${time})`);
+                        
+                        cell.appendChild(addBtn);
                     }
                     gridBody.appendChild(cell);
                 }
