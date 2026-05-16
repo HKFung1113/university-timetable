@@ -13,12 +13,12 @@
         }
     </style>
 </head>
-<body id="body" class="bg-slate-50 text-slate-800 font-sans p-4 md:p-6 transition-colors duration-200">
+<body id="body" class="bg-white text-black font-sans p-4 md:p-6 transition-colors duration-200">
 
     <div class="max-w-7xl mx-auto">
         
         <div class="flex flex-wrap justify-end items-center gap-2 mb-4">
-            <button onclick="toggleDarkMode()" id="btn-dark" class="px-3 py-1 text-xs font-medium rounded-lg border bg-slate-800 text-white dark:bg-white dark:text-slate-800 cursor-pointer flex items-center gap-1 mr-2">
+            <button onclick="toggleDarkMode()" id="btn-dark" class="px-3 py-1 text-xs font-medium rounded-lg border border-black bg-black text-white cursor-pointer flex items-center gap-1 mr-2">
                 🌙 <span id="txt-dark-btn">黑夜模式</span>
             </button>
             <div class="h-4 w-[1px] bg-slate-300 mr-2"></div>
@@ -28,29 +28,29 @@
         </div>
 
         <div class="text-center mb-6">
-            <h1 id="txt-title" class="text-3xl font-bold text-slate-800 dark:text-slate-100 mb-2">📅 自訂行程時間表</h1>
-            <p id="txt-subtitle" class="text-slate-600 dark:text-slate-400">網格支援【直接點擊】！輕鬆規劃你的完美每週行程！</p>
+            <h1 id="txt-title" class="text-3xl font-bold mb-2">📅 自訂行程時間表</h1>
+            <p id="txt-subtitle" class="text-slate-600">網格支援【直接點擊】！輕鬆規劃你的完美每週行程！</p>
         </div>
 
         <div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
             <div class="space-y-4 xl:col-span-1">
-                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
-                    <h3 id="txt-filter-title" class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">⏰ 顯示時間範圍 (24h)</h3>
+                <div id="panel-filter" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                    <h3 id="txt-filter-title" class="text-sm font-bold mb-3">⏰ 顯示時間範圍 (24h)</h3>
                     <div class="grid grid-cols-2 gap-2 text-xs">
                         <div>
-                            <label id="lbl-filter-start" class="block text-slate-500 dark:text-slate-400 mb-1">開始</label>
-                            <select id="filterStartTime" onchange="updateTimeFilter()" class="w-full px-2 py-1.5 border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200"></select>
+                            <label id="lbl-filter-start" class="block text-slate-500 mb-1">開始時間</label>
+                            <select id="filterStartTime" onchange="updateTimeFilter()" class="w-full px-2 py-1.5 border border-slate-200 rounded-lg bg-white text-black"></select>
                         </div>
                         <div>
-                            <label id="lbl-filter-end" class="block text-slate-500 dark:text-slate-400 mb-1">結束</label>
-                            <select id="filterEndTime" onchange="updateTimeFilter()" class="w-full px-2 py-1.5 border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200"></select>
+                            <label id="lbl-filter-end" class="block text-slate-500 mb-1">結束時間</label>
+                            <select id="filterEndTime" onchange="updateTimeFilter()" class="w-full px-2 py-1.5 border border-slate-200 rounded-lg bg-white text-black"></select>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 h-fit">
-                    <h2 id="txt-list-title" class="text-xl font-bold text-slate-700 dark:text-slate-200 mb-2">📝 我的每週行程一覽</h2>
-                    <p id="txt-list-tip" class="text-xs text-slate-400 dark:text-slate-500 mb-4">💡 提示：點擊時間表任意空格即可彈出視窗加入行程。</p>
+                <div id="panel-list" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 h-fit">
+                    <h2 id="txt-list-title" class="text-xl font-bold mb-2">📝 我的每週行程一覽</h2>
+                    <p id="txt-list-tip" class="text-xs text-slate-400 mb-4">💡 提示：點擊時間表任意空格即可新增，點擊已有行程可進行修改。</p>
                     <ul id="courseList" class="space-y-2 max-h-72 overflow-y-auto text-xs">
                         </ul>
                 </div>
@@ -58,25 +58,25 @@
 
             <div class="xl:col-span-3">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
-                    <span id="txt-clash-alert" class="text-xs text-slate-500 dark:text-slate-400">⚠️ 同一時段重複加行程會觸發紅色撞時間警告。</span>
+                    <span id="txt-clash-alert" class="text-xs text-slate-500">⚠️ 同一時段重複加行程會觸發紅色撞時間警告。</span>
                     <button onclick="downloadTimetable()" id="btn-screenshot" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition cursor-pointer text-center border-none">
                         📸 下載時間表截圖
                     </button>
                 </div>
 
-                <div id="timetableCapture" class="bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-x-auto">
-                    <div class="timetable-grid border-b border-slate-200 dark:border-slate-700 pb-2 text-center font-bold text-slate-700 dark:text-slate-300 text-xs gap-1">
+                <div id="timetableCapture" class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 overflow-x-auto">
+                    <div id="timetableHeader" class="timetable-grid border-b border-slate-200 pb-2 text-center font-bold text-xs gap-1 text-black">
                         <div id="th-time">時間</div>
-                        <div class="text-blue-600 dark:text-blue-400">Mon</div>
-                        <div class="text-blue-600 dark:text-blue-400">Tue</div>
-                        <div class="text-blue-600 dark:text-blue-400">Wed</div>
-                        <div class="text-blue-600 dark:text-blue-400">Thu</div>
-                        <div class="text-blue-600 dark:text-blue-400">Fri</div>
-                        <div class="text-amber-600 dark:text-amber-400">Sat</div>
-                        <div class="text-amber-600 dark:text-amber-400">Sun</div>
+                        <div class="text-blue-600">Mon</div>
+                        <div class="text-blue-600">Tue</div>
+                        <div class="text-blue-600">Wed</div>
+                        <div class="text-blue-600">Thu</div>
+                        <div class="text-blue-600">Fri</div>
+                        <div class="text-amber-600">Sat</div>
+                        <div class="text-amber-600">Sun</div>
                     </div>
 
-                    <div id="timetableRows" class="divide-y divide-slate-100 dark:divide-slate-800">
+                    <div id="timetableRows" class="divide-y divide-slate-100">
                         </div>
                 </div>
             </div>
@@ -84,18 +84,18 @@
     </div>
 
     <div id="courseModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 max-w-sm w-full shadow-xl border border-slate-100 dark:border-slate-800 transform transition-all scale-100 text-slate-800 dark:text-slate-100">
+        <div id="modalBox" class="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl border border-slate-200 transform transition-all scale-100 text-black">
             <h3 id="modal-title" class="text-lg font-bold mb-4">➕ 新增行程資料</h3>
             
             <div class="space-y-4">
                 <div>
-                    <label id="modal-label-name" class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">項目 / 行程名稱</label>
-                    <input type="text" id="modalCourseName" placeholder="" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 dark:text-slate-100">
+                    <label id="modal-label-name" class="block text-sm font-medium text-slate-500 mb-1">項目 / 行程名稱</label>
+                    <input type="text" id="modalCourseName" placeholder="" class="w-full px-3 py-2 border border-slate-200 rounded-lg bg-white text-black focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
 
                 <div>
-                    <label id="modal-label-day" class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">星期幾</label>
-                    <select id="modalCourseDay" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100">
+                    <label id="modal-label-day" class="block text-sm font-medium text-slate-500 mb-1">星期幾</label>
+                    <select id="modalCourseDay" class="w-full px-3 py-2 border border-slate-200 rounded-lg bg-white text-black">
                         <option value="1">星期一 (Mon)</option>
                         <option value="2">星期二 (Tue)</option>
                         <option value="3">星期三 (Wed)</option>
@@ -108,17 +108,17 @@
 
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label id="modal-label-start" class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">開始時間</label>
-                        <select id="modalStartTime" onchange="onModalStartChange()" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100"></select>
+                        <label id="modal-label-start" class="block text-sm font-medium text-slate-500 mb-1">開始時間</label>
+                        <select id="modalStartTime" onchange="onModalStartChange()" class="w-full px-3 py-2 border border-slate-200 rounded-lg bg-white text-black"></select>
                     </div>
                     <div>
-                        <label id="modal-label-end" class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">結束時間</label>
-                        <select id="modalEndTime" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100"></select>
+                        <label id="modal-label-end" class="block text-sm font-medium text-slate-500 mb-1">結束時間</label>
+                        <select id="modalEndTime" class="w-full px-3 py-2 border border-slate-200 rounded-lg bg-white text-black"></select>
                     </div>
                 </div>
 
                 <div class="flex gap-2 pt-2">
-                    <button onclick="closeModal()" id="btn-modal-cancel" class="w-1/2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 font-medium py-2 rounded-lg cursor-pointer text-center text-sm border-none">
+                    <button onclick="closeModal()" id="btn-modal-cancel" class="w-1/2 bg-slate-100 text-slate-600 font-medium py-2 rounded-lg cursor-pointer text-center text-sm border-none">
                         取消
                     </button>
                     <button onclick="saveModalCourse()" id="btn-modal-confirm" class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg cursor-pointer text-center text-sm border-none">
@@ -135,17 +135,19 @@
                 title: "📅 自訂行程時間表",
                 subtitle: "網格支援【直接點擊】！輕鬆規劃你的完美每週行程！",
                 listTitle: "📝 我的每週行程一覽",
-                listTip: "💡 提示：點擊時間表任意空格即可彈出視窗加入行程。",
+                listTip: "💡 提示：點擊時間表任意空格即可新增，點擊已有行程可進行修改。",
                 clashAlert: "⚠️ 同一時段重複加行程會觸發紅色撞時間警告。",
                 screenshot: "📸 下載時間表截圖",
                 time: "時間",
-                modalTitle: "➕ 新增行程資料",
+                modalTitleAdd: "➕ 新增行程資料",
+                modalTitleEdit: "✏️ 修改行程資料",
                 labelName: "項目 / 行程名稱",
                 labelDay: "星期幾",
                 labelStart: "開始時間",
                 labelEnd: "結束時間",
                 btnCancel: "取消",
-                btnConfirm: "確認加入",
+                btnConfirmAdd: "確認加入",
+                btnConfirmEdit: "確認修改",
                 placeholder: "例如: 補習 / 兼職 / 溫習",
                 alertInput: "請輸入名稱！",
                 alertTimeOrder: "結束時間必須遲過開始時間！",
@@ -160,17 +162,19 @@
                 title: "📅 自定义行程时间表",
                 subtitle: "网格支持【直接点击】！轻松规划你的完美每周行程！",
                 listTitle: "📝 我的每周行程一览",
-                listTip: "💡 提示：点击时间表任意空格即可弹出视窗加入行程。",
+                listTip: "💡 提示：点击时间表任意空格即可新增，点击已有行程可进行修改。",
                 clashAlert: "⚠️ 同一时段重复加行程会触发红色撞时间警告。",
                 screenshot: "📸 下载时间表截图",
                 time: "时间",
-                modalTitle: "➕ 新增行程资料",
+                modalTitleAdd: "➕ 新增行程资料",
+                modalTitleEdit: "✏️ 修改行程资料",
                 labelName: "项目 / 行程名称",
                 labelDay: "星期几",
                 labelStart: "开始时间",
                 labelEnd: "结束时间",
                 btnCancel: "取消",
-                btnConfirm: "确认加入",
+                btnConfirmAdd: "确认加入",
+                btnConfirmEdit: "确认修改",
                 placeholder: "例如: 补习 / 兼职 / 温习",
                 alertInput: "请输入名称！",
                 alertTimeOrder: "结束时间必须迟过开始时间！",
@@ -185,17 +189,19 @@
                 title: "📅 Custom Weekly Schedule Planner",
                 subtitle: "Click any grid cell directly to schedule! Plan your perfect week easily!",
                 listTitle: "📝 My Weekly Overview",
-                listTip: "💡 Tip: Click any blank grid cell to add an event.",
+                listTip: "💡 Tip: Click blank grid to add, click existing event to edit.",
                 clashAlert: "⚠️ Adding multiple events to the same slot will trigger a red clash warning.",
                 screenshot: "📸 Download Timetable Screenshot",
                 time: "Time",
-                modalTitle: "➕ Add New Event",
+                modalTitleAdd: "➕ Add New Event",
+                modalTitleEdit: "✏️ Edit Event Details",
                 labelName: "Event Name",
                 labelDay: "Day of the Week",
                 labelStart: "Start Time",
                 labelEnd: "End Time",
                 btnCancel: "Cancel",
-                btnConfirm: "Confirm & Add",
+                btnConfirmAdd: "Confirm & Add",
+                btnConfirmEdit: "Save Changes",
                 placeholder: "e.g., Tutor / Part-time / Study",
                 alertInput: "Please enter a name!",
                 alertTimeOrder: "End time must be later than start time!",
@@ -211,6 +217,7 @@
         let currentLang = 'zh';
         let courses = [];
         let isDarkMode = false;
+        let editingCourseId = null; // 用於紀錄當前正在修改的行程 ID
         
         let displayStart = 9;
         let displayEnd = 21;
@@ -243,24 +250,54 @@
             filterEndSel.value = displayEnd;
         }
 
-        // 黑夜模式切換核心
         function toggleDarkMode() {
             isDarkMode = !isDarkMode;
             const body = document.getElementById('body');
             const darkBtnText = document.getElementById('txt-dark-btn');
-            
+            const btnDark = document.getElementById('btn-dark');
+            const panelFilter = document.getElementById('panel-filter');
+            const panelList = document.getElementById('panel-list');
+            const timetableCapture = document.getElementById('timetableCapture');
+            const modalBox = document.getElementById('modalBox');
+            const txtSubtitle = document.getElementById('txt-subtitle');
+
             if (isDarkMode) {
-                body.classList.add('dark', 'bg-slate-950');
-                body.classList.remove('bg-slate-50');
+                body.className = "bg-black text-white font-sans p-4 md:p-6 transition-colors duration-200";
+                btnDark.className = "px-3 py-1 text-xs font-medium rounded-lg border border-white bg-white text-black cursor-pointer flex items-center gap-1 mr-2";
                 darkBtnText.innerText = langPack[currentLang].darkBtnOff;
-                document.getElementById('btn-dark').className = "px-3 py-1 text-xs font-medium rounded-lg border bg-white text-slate-800 cursor-pointer flex items-center gap-1 mr-2";
+                txtSubtitle.className = "text-slate-400";
+
+                panelFilter.className = "bg-black p-5 rounded-2xl shadow-sm border border-slate-800 text-white";
+                panelList.className = "bg-black p-5 rounded-2xl shadow-sm border border-slate-800 h-fit text-white";
+                timetableCapture.className = "bg-black p-4 rounded-2xl shadow-sm border border-slate-800 overflow-x-auto";
+                modalBox.className = "bg-black rounded-2xl p-6 max-w-sm w-full shadow-xl border border-slate-800 transform transition-all scale-100 text-white";
+
+                document.getElementById('timetableHeader').className = "timetable-grid border-b border-slate-800 pb-2 text-center font-bold text-xs gap-1 text-white";
             } else {
-                body.classList.remove('dark', 'bg-slate-950');
-                body.classList.add('bg-slate-50');
+                body.className = "bg-white text-black font-sans p-4 md:p-6 transition-colors duration-200";
+                btnDark.className = "px-3 py-1 text-xs font-medium rounded-lg border border-black bg-black text-white cursor-pointer flex items-center gap-1 mr-2";
                 darkBtnText.innerText = langPack[currentLang].darkBtnOn;
-                document.getElementById('btn-dark').className = "px-3 py-1 text-xs font-medium rounded-lg border bg-slate-800 text-white cursor-pointer flex items-center gap-1 mr-2";
+                txtSubtitle.className = "text-slate-600";
+
+                panelFilter.className = "bg-white p-5 rounded-2xl shadow-sm border border-slate-200 text-black";
+                panelList.className = "bg-white p-5 rounded-2xl shadow-sm border border-slate-200 h-fit text-black";
+                timetableCapture.className = "bg-white p-4 rounded-2xl shadow-sm border border-slate-200 overflow-x-auto";
+                modalBox.className = "bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl border border-slate-200 transform transition-all scale-100 text-black";
+
+                document.getElementById('timetableHeader').className = "timetable-grid border-b border-slate-200 pb-2 text-center font-bold text-xs gap-1 text-black";
             }
+            
+            const allSelectsInputs = document.querySelectorAll('select, input[type="text"]');
+            allSelectsInputs.forEach(el => {
+                if (isDarkMode) {
+                    el.className = el.className.replace(/bg-white|text-black|border-slate-200/g, '').trim() + " bg-black text-white border-slate-700";
+                } else {
+                    el.className = el.className.replace(/bg-black|text-white|border-slate-700/g, '').trim() + " bg-white text-black border-slate-200";
+                }
+            });
+
             renderTimetable();
+            updateUI();
         }
 
         function updateTimeFilter() {
@@ -296,14 +333,20 @@
             document.getElementById('lbl-filter-end').innerText = p.filterEnd;
             document.getElementById('txt-dark-btn').innerText = isDarkMode ? p.darkBtnOff : p.darkBtnOn;
             
-            document.getElementById('modal-title').innerText = p.modalTitle;
             document.getElementById('modal-label-name').innerText = p.labelName;
             document.getElementById('modal-label-day').innerText = p.labelDay;
             document.getElementById('modal-label-start').innerText = p.labelStart;
             document.getElementById('modal-label-end').innerText = p.labelEnd;
             document.getElementById('btn-modal-cancel').innerText = p.btnCancel;
-            document.getElementById('btn-modal-confirm').innerText = p.btnConfirm;
             document.getElementById('modalCourseName').placeholder = p.placeholder;
+
+            if(editingCourseId) {
+                document.getElementById('modal-title').innerText = p.modalTitleEdit;
+                document.getElementById('btn-modal-confirm').innerText = p.btnConfirmEdit;
+            } else {
+                document.getElementById('modal-title').innerText = p.modalTitleAdd;
+                document.getElementById('btn-modal-confirm').innerText = p.btnConfirmAdd;
+            }
 
             ['zh', 'cn', 'en'].forEach(l => {
                 const btn = document.getElementById(`btn-${l}`);
@@ -311,7 +354,7 @@
                     btn.className = "px-3 py-1 text-xs font-medium rounded-lg border bg-blue-600 text-white cursor-pointer";
                 } else {
                     btn.className = isDarkMode 
-                        ? "px-3 py-1 text-xs font-medium rounded-lg border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer"
+                        ? "px-3 py-1 text-xs font-medium rounded-lg border border-slate-700 bg-black text-white cursor-pointer"
                         : "px-3 py-1 text-xs font-medium rounded-lg border bg-white text-slate-600 hover:bg-slate-100 cursor-pointer";
                 }
             });
@@ -324,7 +367,6 @@
             updateUI();
         }
 
-        // 當用家在彈出視窗手動更改「開始時間」時，動態更新「結束時間」的選項範圍
         function onModalStartChange() {
             const currentStart = parseFloat(startSelect.value);
             const savedEndValue = parseFloat(endSelect.value);
@@ -341,12 +383,47 @@
             }
         }
 
-        function openModal(day, timeValue) {
-            document.getElementById('modalCourseDay').value = day;
-            startSelect.value = timeValue; // 現在可以自由點選了
-            
-            // 重新填裝結束時間範圍並自動選擇下一格
-            onModalStartChange();
+        // 開啟彈出視窗（支援新增與修改模式）
+        function openModal(day, timeValue, courseId = null) {
+            editingCourseId = courseId;
+            const p = langPack[currentLang];
+
+            if (editingCourseId) {
+                // 修改模式
+                document.getElementById('modal-title').innerText = p.modalTitleEdit;
+                document.getElementById('btn-modal-confirm').innerText = p.btnConfirmEdit;
+                
+                const target = courses.find(c => c.id === courseId);
+                if (target) {
+                    document.getElementById('modalCourseName').value = target.name;
+                    document.getElementById('modalCourseDay').value = target.day;
+                    startSelect.value = target.start;
+                    
+                    endSelect.innerHTML = '';
+                    for(let i = target.start + 0.5; i <= 24; i += 0.5) {
+                        endSelect.options.add(new Option(formatTime(i), i));
+                    }
+                    endSelect.value = target.end;
+                }
+            } else {
+                // 新增模式
+                document.getElementById('modal-title').innerText = p.modalTitleAdd;
+                document.getElementById('btn-modal-confirm').innerText = p.btnConfirmAdd;
+                
+                document.getElementById('modalCourseDay').value = day;
+                startSelect.value = timeValue;
+                onModalStartChange();
+            }
+
+            // 同步一次顏色外觀樣式
+            const allSelectsInputs = document.querySelectorAll('select, input[type="text"]');
+            allSelectsInputs.forEach(el => {
+                if (isDarkMode) {
+                    el.className = el.className.replace(/bg-white|text-black|border-slate-200/g, '').trim() + " bg-black text-white border-slate-700";
+                } else {
+                    el.className = el.className.replace(/bg-black|text-white|border-slate-700/g, '').trim() + " bg-white text-black border-slate-200";
+                }
+            });
 
             document.getElementById('courseModal').classList.remove('hidden');
             document.getElementById('modalCourseName').focus();
@@ -355,11 +432,12 @@
         function closeModal() {
             document.getElementById('courseModal').classList.add('hidden');
             document.getElementById('modalCourseName').value = '';
+            editingCourseId = null;
         }
 
         function saveModalCourse() {
             const name = document.getElementById('modalCourseName').value.trim();
-            const day = document.getElementById('modalCourseDay').value;
+            const day = parseInt(document.getElementById('modalCourseDay').value);
             const start = parseFloat(startSelect.value);
             const end = parseFloat(endSelect.value);
 
@@ -372,7 +450,20 @@
                 return;
             }
 
-            courses.push({ id: Date.now(), name, day, start, end });
+            if (editingCourseId) {
+                // 修改已有行程
+                const target = courses.find(c => c.id === editingCourseId);
+                if (target) {
+                    target.name = name;
+                    target.day = day;
+                    target.start = start;
+                    target.end = end;
+                }
+            } else {
+                // 新增行程
+                courses.push({ id: Date.now(), name, day, start, end });
+            }
+
             closeModal();
             updateUI();
         }
@@ -383,10 +474,14 @@
 
             for (let time = displayStart; time < displayEnd; time += 0.5) {
                 const row = document.createElement('div');
-                row.className = 'timetable-grid min-h-[45px] items-stretch text-center text-[11px] gap-1';
+                row.className = isDarkMode 
+                    ? 'timetable-grid min-h-[45px] items-stretch text-center text-[11px] gap-1 divide-slate-800'
+                    : 'timetable-grid min-h-[45px] items-stretch text-center text-[11px] gap-1 divide-slate-100';
                 
                 const timeLabel = document.createElement('div');
-                timeLabel.className = 'flex items-center justify-center border-r border-slate-100 dark:border-slate-800 text-slate-400 dark:text-slate-500 font-mono bg-slate-50 dark:bg-slate-900/50';
+                timeLabel.className = isDarkMode
+                    ? 'flex items-center justify-center border-r border-slate-800 text-slate-400 font-mono bg-black'
+                    : 'flex items-center justify-center border-r border-slate-100 text-slate-400 font-mono bg-slate-50';
                 timeLabel.innerText = formatTime(time);
                 row.appendChild(timeLabel);
 
@@ -400,24 +495,29 @@
                         if (slotCourses.length > 1) {
                             slotCourses.forEach(c => {
                                 const subItem = document.createElement('div');
-                                // 黑夜與白天的撞時間紅色樣式優化
                                 subItem.className = isDarkMode 
-                                    ? 'flex-1 bg-red-950/80 text-red-300 border border-red-900 rounded flex items-center justify-center p-1 font-medium truncate'
-                                    : 'flex-1 bg-red-100 text-red-800 border border-red-300 rounded flex items-center justify-center p-1 font-medium truncate';
+                                    ? 'flex-1 bg-red-950 text-red-200 border border-red-800 rounded flex items-center justify-center p-1 font-medium truncate cursor-pointer'
+                                    : 'flex-1 bg-red-100 text-red-800 border border-red-300 rounded flex items-center justify-center p-1 font-medium truncate cursor-pointer';
                                 subItem.innerHTML = `<span>${c.name}</span>`;
+                                // 點擊觸發修改
+                                subItem.setAttribute('onclick', `openModal(null, null, ${c.id})`);
                                 cell.appendChild(subItem);
                             });
                         } else {
+                            const c = slotCourses[0];
                             const subItem = document.createElement('div');
-                            // 黑夜與白天的常規行程藍色樣式優化
                             subItem.className = isDarkMode
-                                ? 'flex-1 bg-blue-950/60 text-blue-300 border border-blue-900 rounded flex items-center justify-center p-1 font-medium truncate'
-                                : 'flex-1 bg-blue-50 text-blue-700 border border-blue-100 rounded flex items-center justify-center p-1 font-medium truncate';
-                            subItem.innerHTML = `<span>${slotCourses[0].name}</span>`;
+                                ? 'flex-1 bg-blue-950 text-blue-200 border border-blue-900 rounded flex items-center justify-center p-1 font-medium truncate cursor-pointer'
+                                : 'flex-1 bg-blue-50 text-blue-700 border border-blue-100 rounded flex items-center justify-center p-1 font-medium truncate cursor-pointer';
+                            subItem.innerHTML = `<span>${c.name}</span>`;
+                            // 點擊觸發修改
+                            subItem.setAttribute('onclick', `openModal(null, null, ${c.id})`);
                             cell.appendChild(subItem);
                         }
                     } else {
-                        cell.className = 'p-1 hover:bg-slate-100 dark:hover:bg-slate-800 text-transparent hover:text-slate-400 dark:hover:text-slate-500 transition cursor-pointer flex items-center justify-center border border-dashed border-slate-100 dark:border-slate-800 rounded min-h-[40px]';
+                        cell.className = isDarkMode
+                            ? 'p-1 hover:bg-slate-900 text-transparent hover:text-slate-500 transition cursor-pointer flex items-center justify-center border border-dashed border-slate-800 rounded min-h-[40px]'
+                            : 'p-1 hover:bg-slate-100 text-transparent hover:text-slate-400 transition cursor-pointer flex items-center justify-center border border-dashed border-slate-100 rounded min-h-[40px]';
                         cell.innerText = '＋';
                         cell.setAttribute('onclick', `openModal(${day}, ${time})`);
                     }
@@ -439,10 +539,15 @@
             
             courses.forEach(c => {
                 const li = document.createElement('li');
-                li.className = 'flex justify-between items-center bg-slate-100 dark:bg-slate-800 p-2 rounded-lg text-slate-800 dark:text-slate-200';
+                li.className = isDarkMode
+                    ? 'flex justify-between items-center bg-slate-900 p-2 rounded-lg text-white'
+                    : 'flex justify-between items-center bg-slate-100 p-2 rounded-lg text-black';
                 li.innerHTML = `
-                    <span class="truncate mr-1"><strong>${c.name}</strong><br><span class="text-slate-500 dark:text-slate-400">${langPack[currentLang].days[c.day]} ${formatTime(c.start)}-${formatTime(c.end)}</span></span>
-                    <button onclick="deleteCourse(${c.id})" class="text-red-500 hover:text-red-700 font-bold px-1 cursor-pointer border-none bg-transparent">❌</button>
+                    <span class="truncate mr-1 cursor-pointer flex-1" onclick="openModal(null, null, ${c.id})">
+                        <strong>${c.name}</strong><br>
+                        <span class="text-slate-400">${langPack[currentLang].days[c.day]} ${formatTime(c.start)}-${formatTime(c.end)}</span>
+                    </span>
+                    <button onclick="deleteCourse(${c.id}); event.stopPropagation();" class="text-red-500 hover:text-red-700 font-bold px-1 cursor-pointer border-none bg-transparent">❌</button>
                 `;
                 list.appendChild(li);
             });
