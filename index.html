@@ -11,6 +11,10 @@
             display: grid;
             grid-template-columns: 90px repeat(7, minmax(110px, 1fr));
         }
+        /* 確保 CSS Grid 每一行具有相對定位與隱式行高 */
+        .timetable-row {
+            position: relative;
+        }
     </style>
 </head>
 <body id="body" class="bg-slate-50 text-slate-900 font-sans p-3 sm:p-6 md:p-8 transition-colors duration-200 min-h-screen">
@@ -212,7 +216,6 @@
             }
         };
 
-        // 預設調色盤：同時包含白天(light)和黑夜(dark)的高對比度配色樣式
         const colorPalette = [
             { light: 'bg-blue-50 text-blue-700 border-blue-200', dark: 'bg-blue-950/90 text-blue-100 border-blue-700' },
             { light: 'bg-emerald-50 text-emerald-700 border-emerald-200', dark: 'bg-emerald-950/90 text-emerald-100 border-emerald-700' },
@@ -490,7 +493,6 @@
                     target.end = end;
                 }
             } else {
-                // 新增時隨機指派一組顏色
                 const randomColorIndex = Math.floor(Math.random() * colorPalette.length);
                 courses.push({ id: Date.now(), name, day, start, end, colorIndex: randomColorIndex });
             }
@@ -503,14 +505,14 @@
             const rowsContainer = document.getElementById('timetableRows');
             rowsContainer.innerHTML = '';
 
-            // 用於追蹤哪些格子已經被前面跨時段(合併)的行程覆蓋了
+            // 用於追蹤在特定（星期-時間）中，由哪個最先開始的非相撞行程所佔據（合併用）
             const coveredSlots = {};
 
             for (let time = displayStart; time < displayEnd; time += 0.5) {
                 const row = document.createElement('div');
                 row.className = isDarkMode 
-                    ? 'timetable-grid min-h-[55px] items-stretch text-center text-xs gap-1.5 border-b border-slate-800 py-1.5 bg-slate-900/40'
-                    : 'timetable-grid min-h-[55px] items-stretch text-center text-xs gap-1.5 border-b border-slate-200/60 py-1.5';
+                    ? 'timetable-grid min-h-[55px] items-slate-stretch text-center text-xs gap-1.5 border-b border-slate-800 py-1.5 bg-slate-900/40 timetable-row'
+                    : 'timetable-grid min-h-[55px] items-slate-stretch text-center text-xs gap-1.5 border-b border-slate-200/60 py-1.5 timetable-row';
                 
                 const timeLabel = document.createElement('div');
                 timeLabel.className = isDarkMode
@@ -520,38 +522,42 @@
                 row.appendChild(timeLabel);
 
                 for (let day = 1; day <= 7; day++) {
-                    // 如果這個時段已經被之前的跨時段行程合併，跳過不重複渲染
+                    // 如果此網格已經被一個完全沒有相撞、且正在向下縱向合併的行程覆蓋，直接跳過不畫
                     if (coveredSlots[`${day}-${time}`]) {
                         continue;
                     }
 
-                    const cell = document.createElement('div');
+                    // 找出所有在當前星期、並且時間範圍涵蓋了當前半小時的所有行程
                     const slotCourses = courses.filter(c => c.day == day && time >= c.start && time < c.end).sort((a,b) => a.id - b.id);
 
+                    const cell = document.createElement('div');
+
                     if (slotCourses.length > 0) {
-                        // 有行程存在
-                        if (slotCourses.length > 1) {
-                            // 情況 A：同一個半小時段內有兩個不同的行程（撞時間）
-                            cell.className = 'p-1 flex flex-col items-stretch justify-start gap-1.5 w-full h-full';
+                        // 檢查這群行程中，是否有任何一個行程在它的「完整生命週期中」與別的行程相撞
+                        const anyClashInGroup = slotCourses.some(c => checkIsClashed(c));
+
+                        if (anyClashInGroup) {
+                            // 【關鍵修復核心】：當有行程相撞時，不採取全局 coveredSlots 跳過，而是讓它們在此時間單元格內橫向 flex 並排！
+                            cell.className = 'p-1 flex flex-row items-stretch justify-center gap-1 w-full h-full min-h-[46px]';
+                            
                             slotCourses.forEach(c => {
                                 const subItem = document.createElement('div');
+                                // 相撞時一律觸發紅色高對比警告色系
                                 subItem.className = isDarkMode 
-                                    ? 'bg-red-950/90 text-red-200 border border-red-700 rounded-xl flex items-center justify-center p-2.5 font-bold text-center cursor-pointer shadow-md hover:scale-[1.02] transition-all w-full break-all'
-                                    : 'bg-red-50 text-red-700 border border-red-200 rounded-xl flex items-center justify-center p-2.5 font-bold text-center cursor-pointer shadow-md hover:scale-[1.02] transition-all w-full break-all';
+                                    ? 'flex-1 bg-red-950/90 text-red-200 border border-red-700 rounded-xl flex items-center justify-center p-1.5 font-bold text-center cursor-pointer shadow-md hover:scale-[1.02] transition-all break-all text-[11px]'
+                                    : 'flex-1 bg-red-50 text-red-700 border border-red-200 rounded-xl flex items-center justify-center p-1.5 font-bold text-center cursor-pointer shadow-md hover:scale-[1.02] transition-all break-all text-[11px]';
                                 subItem.innerHTML = `<span>${c.name}</span>`;
                                 subItem.setAttribute('onclick', `openModal(null, null, ${c.id})`);
                                 cell.appendChild(subItem);
                             });
+
                         } else {
-                            // 情況 B：正常單一行程，計算它在目前顯示範圍內跨越了多少個 30 分鐘格子，進行格子合併！
+                            // 正常沒相撞的單一行程：執行完美的跨時段大格子合併
                             const c = slotCourses[0];
-                            
-                            // 算出該行程在目前過濾範圍內的實際渲染跨度
                             const renderStart = Math.max(c.start, displayStart);
                             const renderEnd = Math.min(c.end, displayEnd);
                             const slotsCount = (renderEnd - renderStart) / 0.5;
 
-                            // 透過 CSS grid 的 grid-row-end 屬性動態縱向跨度合併
                             cell.style.gridRow = `span ${slotsCount}`;
                             cell.className = 'p-1 flex flex-col items-stretch justify-center w-full h-full';
 
@@ -561,7 +567,6 @@
                             }
 
                             const subItem = document.createElement('div');
-                            // 獲取指派的隨機配色，如無則預設為 0
                             const themeColors = colorPalette[c.colorIndex || 0];
                             const currentThemeClass = isDarkMode ? themeColors.dark : themeColors.light;
 
@@ -572,7 +577,7 @@
                             cell.appendChild(subItem);
                         }
                     } else {
-                        // 情況 C：空白格
+                        // 空白網格格
                         cell.className = isDarkMode
                             ? 'p-1 hover:bg-slate-800 text-transparent hover:text-white transition-all cursor-pointer flex items-center justify-center border border-dashed border-slate-800 hover:border-slate-600 rounded-xl min-h-[46px] font-extrabold text-base'
                             : 'p-1 hover:bg-slate-100 text-transparent hover:text-slate-400 transition-all cursor-pointer flex items-center justify-center border border-dashed border-slate-200 hover:border-slate-400 rounded-xl min-h-[46px] font-extrabold text-base';
