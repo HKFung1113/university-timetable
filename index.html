@@ -389,7 +389,6 @@
                 notesTitle.className = "text-base font-bold mb-1.5 text-slate-900";
 
                 document.getElementById('th-time').className = "p-2.5 text-center font-extrabold text-slate-500 border-b border-slate-200 text-xs sm:text-sm";
-                // 【白天模式修正】：將 Mon, Tue, Wed 統一調整為更沉穩的黑色 text-slate-900
                 ['mon', 'tue', 'wed'].forEach(d => document.getElementById(`th-${d}`).className = "p-2.5 text-center font-bold text-slate-900 border-b border-slate-200 text-xs sm:text-sm");
                 ['thu', 'fri'].forEach(d => document.getElementById(`th-${d}`).className = "p-2.5 text-center font-bold text-slate-700 border-b border-slate-200 text-xs sm:text-sm");
                 ['sat', 'sun'].forEach(d => document.getElementById(`th-${d}`).className = "p-2.5 text-center font-bold text-amber-600 border-b border-slate-200 text-xs sm:text-sm");
@@ -642,16 +641,15 @@
                     cell.style.gridColumn = `${day + 1}`;
 
                     if (slotCourses.length > 0) {
+                        // 找到該組重疊行程中，覆蓋範圍最早/最長的代表
                         const mainCourse = slotCourses[0];
-                        const anyClashInGroup = slotCourses.length > 1 || checkIsClashed(mainCourse);
+                        const renderStart = Math.max(mainCourse.start, displayStart);
+                        const renderEnd = Math.min(mainCourse.end, displayEnd);
 
-                        if (time === Math.max(mainCourse.start, displayStart)) {
-                            const renderStart = Math.max(mainCourse.start, displayStart);
-                            const renderEnd = Math.min(mainCourse.end, displayEnd);
+                        if (time === renderStart) {
                             const slotsCount = (renderEnd - renderStart) / 0.5;
-
                             cell.style.gridRow = `${rowIndex} / span ${slotsCount}`;
-                            cell.className = `p-1 flex flex-col items-slate-stretch justify-center border-b ${borderStyle}`;
+                            cell.className = `p-1 flex flex-col items-stretch justify-center border-b ${borderStyle}`;
 
                             for (let t = renderStart; t < renderEnd; t += 0.5) {
                                 cellOccupied[`${day}-${t}`] = true;
@@ -659,25 +657,31 @@
 
                             const subItem = document.createElement('div');
                             
-                            if (anyClashInGroup) {
+                            // 【關鍵修正】：如果有多於一個行程，不再只有單一名稱，而是並排全部列出，避免 cover 問題
+                            if (slotCourses.length > 1) {
                                 subItem.className = isDarkMode 
-                                    ? 'w-full h-full bg-red-950/90 text-red-200 border-2 border-red-500 rounded-xl flex items-center justify-center p-2 font-bold text-center cursor-pointer shadow-md hover:scale-[1.01] transition-all break-all min-h-[46px]'
-                                    : 'w-full h-full bg-red-50 text-red-700 border-2 border-red-400 rounded-xl flex items-center justify-center p-2 font-bold text-center cursor-pointer shadow-md hover:scale-[1.01] transition-all break-all min-h-[46px]';
+                                    ? 'w-full h-full bg-red-950/90 text-red-200 border-2 border-red-500 rounded-xl flex flex-col items-center justify-center gap-1 p-2 font-bold text-center cursor-pointer shadow-md hover:scale-[1.01] transition-all break-all min-h-[46px]'
+                                    : 'w-full h-full bg-red-50 text-red-700 border-2 border-red-400 rounded-xl flex flex-col items-center justify-center gap-1 p-2 font-bold text-center cursor-pointer shadow-md hover:scale-[1.01] transition-all break-all min-h-[46px]';
+                                
+                                // 將所有在此時段重疊的行程名稱串接出來
+                                let namesHtml = slotCourses.map(c => `<div class="w-full truncate border-b border-dashed border-red-300/30 last:border-none pb-0.5 last:pb-0">${c.name}</div>`).join('');
+                                subItem.innerHTML = namesHtml;
+                                subItem.setAttribute('onclick', `openModal(null, null, ${mainCourse.id})`);
                             } else {
                                 const themeColors = colorPalette[mainCourse.colorIndex || 0];
                                 const currentThemeClass = isDarkMode ? themeColors.dark : themeColors.light;
                                 subItem.className = `w-full h-full border rounded-xl flex items-center justify-center p-2 font-bold text-center cursor-pointer shadow-md hover:scale-[1.01] transition-all break-all min-h-[46px]`;
                                 subItem.classList.add(...currentThemeClass.split(' '));
+                                subItem.innerHTML = `<span>${mainCourse.name}</span>`;
+                                subItem.setAttribute('onclick', `openModal(null, null, ${mainCourse.id})`);
                             }
-
-                            subItem.innerHTML = `<span>${mainCourse.name}</span>`;
-                            subItem.setAttribute('onclick', `openModal(null, null, ${mainCourse.id})`);
+                            
                             cell.appendChild(subItem);
                         } else {
                             continue;
                         }
                     } else {
-                        cell.className = `p-1 border-b border-r ${borderStyle} min-h-[55px] flex items-slate-stretch justify-center`;
+                        cell.className = `p-1 border-b border-r ${borderStyle} min-h-[55px] flex items-stretch justify-center`;
                         cell.style.gridRow = `${rowIndex}`;
 
                         const addBtn = document.createElement('div');
