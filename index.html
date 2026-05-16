@@ -27,59 +27,56 @@
             <button onclick="changeLang('en')" id="btn-en" class="px-3.5 py-1.5 text-xs font-semibold rounded-xl border bg-white text-slate-600 hover:bg-slate-100 cursor-pointer shadow-sm">English</button>
         </div>
 
-        <div class="text-center py-4">
-            <h1 id="txt-title" class="text-3xl sm:text-4xl font-extrabold mb-3 tracking-tight">📅 自訂行程時間表</h1>
+        <div class="text-center py-2">
+            <h1 id="txt-title" class="text-3xl sm:text-4xl font-extrabold mb-2 tracking-tight">📅 自訂行程時間表</h1>
             <p id="txt-subtitle" class="text-sm sm:text-base text-slate-600 font-medium">網格支援【直接點擊】！輕鬆規劃你的完美每週行程！</p>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            
-            <div class="space-y-6 lg:col-span-4 w-full">
-                <div id="panel-filter" class="bg-white p-6 rounded-2xl shadow-md border border-slate-200/80 transition-all">
-                    <h3 id="txt-filter-title" class="text-base font-bold mb-4 flex items-center gap-2 text-slate-900">⏰ 顯示時間範圍 (24h)</h3>
-                    <div class="grid grid-cols-2 gap-4 text-sm">
-                        <div>
-                            <label id="lbl-filter-start" class="block text-slate-500 font-medium mb-1.5">開始時間</label>
-                            <select id="filterStartTime" onchange="updateTimeFilter()" class="w-full px-3 py-2.5 border border-slate-300 rounded-xl bg-white text-slate-900 font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm sm:text-base"></select>
-                        </div>
-                        <div>
-                            <label id="lbl-filter-end" class="block text-slate-500 font-medium mb-1.5">結束時間</label>
-                            <select id="filterEndTime" onchange="updateTimeFilter()" class="w-full px-3 py-2.5 border border-slate-300 rounded-xl bg-white text-slate-900 font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm sm:text-base"></select>
-                        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+            <div id="panel-filter" class="bg-white p-5 rounded-2xl shadow-md border border-slate-200/80 transition-all flex flex-col justify-center">
+                <h3 id="txt-filter-title" class="text-base font-bold mb-3 flex items-center gap-2 text-slate-900">⏰ 顯示時間範圍 (24h)</h3>
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                        <label id="lbl-filter-start" class="block text-slate-500 font-medium mb-1.5">開始時間</label>
+                        <select id="filterStartTime" onchange="updateTimeFilter()" class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white text-slate-900 font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm"></select>
                     </div>
-                </div>
-
-                <div id="panel-list" class="bg-white p-6 rounded-2xl shadow-md border border-slate-200/80 h-fit transition-all">
-                    <h2 id="txt-list-title" class="text-xl font-bold mb-2 text-slate-900">📝 我的每週行程一覽</h2>
-                    <p id="txt-list-tip" class="text-xs text-slate-400 mb-4 font-medium">💡 提示：點擊時間表任意空格即可新增，點擊已有行程可進行修改。</p>
-                    <ul id="courseList" class="space-y-3 max-h-[350px] overflow-y-auto pr-1 text-sm">
-                        </ul>
+                    <div>
+                        <label id="lbl-filter-end" class="block text-slate-500 font-medium mb-1.5">結束時間</label>
+                        <select id="filterEndTime" onchange="updateTimeFilter()" class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white text-slate-900 font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm"></select>
+                    </div>
                 </div>
             </div>
 
-            <div class="lg:col-span-8 w-full space-y-3">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                    <span id="txt-clash-alert" class="text-xs sm:text-sm text-slate-500 font-medium">⚠️ 同一時段重複加行程會觸發紅色撞時間警告。</span>
-                    <button onclick="downloadTimetable()" id="btn-screenshot" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold px-5 py-3 rounded-xl shadow-md hover:shadow-lg transition cursor-pointer text-center border-none">
-                        📸 下載時間表截圖
-                    </button>
+            <div id="panel-list" class="bg-white p-5 rounded-2xl shadow-md border border-slate-200/80 transition-all">
+                <h2 id="txt-list-title" class="text-base font-bold mb-1 text-slate-900">📝 我的每週行程一覽</h2>
+                <p id="txt-list-tip" class="text-[11px] text-slate-400 mb-2 font-medium">💡 點擊時間表空格即可新增，點擊已有行程可修改。</p>
+                <ul id="courseList" class="space-y-2 max-h-[110px] overflow-y-auto pr-1 text-sm">
+                    </ul>
+            </div>
+        </div>
+
+        <div class="w-full space-y-3 pt-4 mx-auto">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <span id="txt-clash-alert" class="text-xs sm:text-sm text-slate-500 font-medium">⚠️ 同一時段重複加行程會觸發紅色撞時間警告。</span>
+                <button onclick="downloadTimetable()" id="btn-screenshot" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md hover:shadow-lg transition cursor-pointer text-center border-none">
+                    📸 下載時間表截圖
+                </button>
+            </div>
+
+            <div id="timetableCapture" class="bg-white p-5 rounded-2xl shadow-md border border-slate-200/80 overflow-x-auto w-full transition-all">
+                <div id="timetableHeader" class="timetable-grid border-b border-slate-200 pb-3 text-center font-bold text-xs sm:text-sm gap-1.5 text-slate-800">
+                    <div id="th-time" class="font-extrabold text-slate-500">時間</div>
+                    <div id="th-mon" class="text-blue-600">Mon</div>
+                    <div id="th-tue" class="text-blue-600">Tue</div>
+                    <div id="th-wed" class="text-blue-600">Wed</div>
+                    <div id="th-thu">Thu</div>
+                    <div id="th-fri">Fri</div>
+                    <div id="th-sat" class="text-amber-600">Sat</div>
+                    <div id="th-sun" class="text-amber-600">Sun</div>
                 </div>
 
-                <div id="timetableCapture" class="bg-white p-5 rounded-2xl shadow-md border border-slate-200/80 overflow-x-auto w-full transition-all">
-                    <div id="timetableHeader" class="timetable-grid border-b border-slate-200 pb-3 text-center font-bold text-xs sm:text-sm gap-1.5 text-slate-800">
-                        <div id="th-time" class="font-extrabold text-slate-500">時間</div>
-                        <div id="th-mon" class="text-blue-600">Mon</div>
-                        <div id="th-tue" class="text-blue-600">Tue</div>
-                        <div id="th-wed" class="text-blue-600">Wed</div>
-                        <div id="th-thu">Thu</div>
-                        <div id="th-fri">Fri</div>
-                        <div id="th-sat" class="text-amber-600">Sat</div>
-                        <div id="th-sun" class="text-amber-600">Sun</div>
+                <div id="timetableRows" class="divide-y divide-slate-100">
                     </div>
-
-                    <div id="timetableRows" class="divide-y divide-slate-100">
-                        </div>
-                </div>
             </div>
         </div>
     </div>
@@ -136,7 +133,7 @@
                 title: "📅 自訂行程時間表",
                 subtitle: "網格支援【直接點擊】！輕鬆規劃你的完美每週行程！",
                 listTitle: "📝 我的每週行程一覽",
-                listTip: "💡 提示：點擊時間表任意空格即可新增，點擊已有行程可進行修改。",
+                listTip: "💡 點擊時間表空格即可新增，點擊已有行程可修改。",
                 clashAlert: "⚠️ 同一時段重複加行程會觸發紅色撞時間警告。",
                 screenshot: "📸 下載時間表截圖",
                 time: "時間",
@@ -163,7 +160,7 @@
                 title: "📅 自定义行程时间表",
                 subtitle: "网格支持【直接点击】！轻松规划你的完美每周行程！",
                 listTitle: "📝 我的每周行程一览",
-                listTip: "💡 提示：点击时间表任意空格即可新增，点击已有行程可进行修改。",
+                listTip: "💡 点击时间表空格即可新增，点击已有行程可修改。",
                 clashAlert: "⚠️ 同一时段重复加行程会触发红色撞时间警告。",
                 screenshot: "📸 下载时间表截图",
                 time: "时间",
@@ -176,7 +173,7 @@
                 btnCancel: "取消",
                 btnConfirmAdd: "确认加入",
                 btnConfirmEdit: "确认修改",
-                placeholder: "例如: 补习 / 兼职 / 温戏",
+                placeholder: "例如: 补习 / 兼职 / 温习",
                 alertInput: "请输入名称！",
                 alertTimeOrder: "结束时间必须迟过开始时间！",
                 filterTitle: "⏰ 显示时间范围 (24h)",
@@ -214,6 +211,15 @@
                 days: ['', 'Monday (Mon)', 'Tuesday (Tue)', 'Wednesday (Wed)', 'Thursday (Thu)', 'Friday (Fri)', 'Saturday (Sat)', 'Sunday (Sun)']
             }
         };
+
+        // 預設調色盤：同時包含白天(light)和黑夜(dark)的高對比度配色樣式
+        const colorPalette = [
+            { light: 'bg-blue-50 text-blue-700 border-blue-200', dark: 'bg-blue-950/90 text-blue-100 border-blue-700' },
+            { light: 'bg-emerald-50 text-emerald-700 border-emerald-200', dark: 'bg-emerald-950/90 text-emerald-100 border-emerald-700' },
+            { light: 'bg-purple-50 text-purple-700 border-purple-200', dark: 'bg-purple-950/90 text-purple-100 border-purple-700' },
+            { light: 'bg-orange-50 text-orange-700 border-orange-200', dark: 'bg-orange-950/90 text-orange-100 border-orange-700' },
+            { light: 'bg-fuchsia-50 text-fuchsia-700 border-fuchsia-200', dark: 'bg-fuchsia-950/90 text-fuchsia-100 border-fuchsia-700' }
+        ];
 
         let currentLang = 'zh';
         let courses = [];
@@ -253,7 +259,7 @@
                 startSelect.options.add(new Option(formatTime(i), i));
                 filterStartSel.options.add(new Option(formatTime(i), i));
             }
-            for(let i = 0.5; i <= 24; i += 0.5) {
+            for(let i = 0; i <= 24; i += 0.5) {
                 filterEndSel.options.add(new Option(formatTime(i), i));
             }
             
@@ -285,15 +291,14 @@
                 txtSubtitle.className = "text-sm sm:text-base text-slate-200 font-medium";
                 txtClashAlert.className = "text-xs sm:text-sm text-slate-300 font-medium";
 
-                panelFilter.className = "bg-slate-900/90 p-6 rounded-2xl shadow-xl border border-slate-800 text-white transition-all";
-                panelList.className = "bg-slate-900/90 p-6 rounded-2xl shadow-xl border border-slate-800 h-fit text-white transition-all";
+                panelFilter.className = "bg-slate-900/90 p-5 rounded-2xl shadow-xl border border-slate-800 text-white transition-all flex flex-col justify-center";
+                panelList.className = "bg-slate-900/90 p-5 rounded-2xl shadow-xl border border-slate-800 text-white transition-all";
                 timetableCapture.className = "bg-slate-900/80 backdrop-blur-md p-5 rounded-2xl shadow-xl border border-slate-800/80 overflow-x-auto w-full transition-all";
                 modalBox.className = "bg-slate-900 rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-slate-800 transform transition-all scale-100 text-white";
 
-                filterTitle.className = "text-base font-bold mb-4 flex items-center gap-2 text-white";
-                listTitle.className = "text-xl font-bold mb-2 text-white";
+                filterTitle.className = "text-base font-bold mb-3 flex items-center gap-2 text-white";
+                listTitle.className = "text-base font-bold mb-1 text-white";
 
-                // 黑夜模式下表頭字體強制全部全白
                 document.getElementById('timetableHeader').className = "timetable-grid border-b border-slate-800 pb-3 text-center font-bold text-xs sm:text-sm gap-1.5 text-white";
                 document.getElementById('th-time').className = "font-extrabold text-white";
                 ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].forEach(d => {
@@ -308,15 +313,14 @@
                 txtSubtitle.className = "text-sm sm:text-base text-slate-600 font-medium";
                 txtClashAlert.className = "text-xs sm:text-sm text-slate-500 font-medium";
 
-                panelFilter.className = "bg-white p-6 rounded-2xl shadow-md border border-slate-200/80 text-slate-900 transition-all";
-                panelList.className = "bg-white p-6 rounded-2xl shadow-md border border-slate-200/80 h-fit text-slate-900 transition-all";
+                panelFilter.className = "bg-white p-5 rounded-2xl shadow-md border border-slate-200/80 text-slate-900 transition-all flex flex-col justify-center";
+                panelList.className = "bg-white p-5 rounded-2xl shadow-md border border-slate-200/80 text-slate-900 transition-all";
                 timetableCapture.className = "bg-white p-5 rounded-2xl shadow-md border border-slate-200/80 overflow-x-auto w-full transition-all";
                 modalBox.className = "bg-white rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-slate-200 transform transition-all scale-100 text-slate-900";
 
-                filterTitle.className = "text-base font-bold mb-4 flex items-center gap-2 text-slate-900";
-                listTitle.className = "text-xl font-bold mb-2 text-slate-900";
+                filterTitle.className = "text-base font-bold mb-3 flex items-center gap-2 text-slate-900";
+                listTitle.className = "text-base font-bold mb-1 text-slate-900";
 
-                // 白天模式還原彩色標籤
                 document.getElementById('timetableHeader').className = "timetable-grid border-b border-slate-200 pb-3 text-center font-bold text-xs sm:text-sm gap-1.5 text-slate-800";
                 document.getElementById('th-time').className = "font-extrabold text-slate-500";
                 ['mon', 'tue', 'wed', 'thu', 'fri'].forEach(d => document.getElementById(`th-${d}`).className = "text-blue-600");
@@ -332,10 +336,9 @@
             const allSelectsInputs = document.querySelectorAll('select, input[type="text"]');
             allSelectsInputs.forEach(el => {
                 if (isDarkMode) {
-                    // 黑夜模式下：框格為白色背景（更顯眼清晰）、字體為黑色
-                    el.className = "w-full px-3 py-2.5 border rounded-xl bg-white text-slate-950 border-slate-400 font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm sm:text-base";
+                    el.className = "w-full px-3 py-2 border rounded-xl bg-white text-slate-950 border-slate-400 font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm";
                 } else {
-                    el.className = "w-full px-3 py-2.5 border rounded-xl bg-white text-slate-900 border-slate-300 font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm sm:text-base";
+                    el.className = "w-full px-3 py-2 border rounded-xl bg-white text-slate-900 border-slate-300 font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm";
                 }
             });
         }
@@ -487,7 +490,9 @@
                     target.end = end;
                 }
             } else {
-                courses.push({ id: Date.now(), name, day, start, end });
+                // 新增時隨機指派一組顏色
+                const randomColorIndex = Math.floor(Math.random() * colorPalette.length);
+                courses.push({ id: Date.now(), name, day, start, end, colorIndex: randomColorIndex });
             }
 
             closeModal();
@@ -498,10 +503,11 @@
             const rowsContainer = document.getElementById('timetableRows');
             rowsContainer.innerHTML = '';
 
+            // 用於追蹤哪些格子已經被前面跨時段(合併)的行程覆蓋了
+            const coveredSlots = {};
+
             for (let time = displayStart; time < displayEnd; time += 0.5) {
                 const row = document.createElement('div');
-                
-                // 行距微調，增加網格線條質感
                 row.className = isDarkMode 
                     ? 'timetable-grid min-h-[55px] items-stretch text-center text-xs gap-1.5 border-b border-slate-800 py-1.5 bg-slate-900/40'
                     : 'timetable-grid min-h-[55px] items-stretch text-center text-xs gap-1.5 border-b border-slate-200/60 py-1.5';
@@ -514,14 +520,19 @@
                 row.appendChild(timeLabel);
 
                 for (let day = 1; day <= 7; day++) {
+                    // 如果這個時段已經被之前的跨時段行程合併，跳過不重複渲染
+                    if (coveredSlots[`${day}-${time}`]) {
+                        continue;
+                    }
+
                     const cell = document.createElement('div');
                     const slotCourses = courses.filter(c => c.day == day && time >= c.start && time < c.end).sort((a,b) => a.id - b.id);
 
                     if (slotCourses.length > 0) {
-                        // 使用 flex-col，當行程多於 1 個時，格子會自動向下垂直增高擴大，完整塞下所有卡片
-                        cell.className = 'p-1 flex flex-col items-stretch justify-start gap-1.5 w-full h-full';
-                        
+                        // 有行程存在
                         if (slotCourses.length > 1) {
+                            // 情況 A：同一個半小時段內有兩個不同的行程（撞時間）
+                            cell.className = 'p-1 flex flex-col items-stretch justify-start gap-1.5 w-full h-full';
                             slotCourses.forEach(c => {
                                 const subItem = document.createElement('div');
                                 subItem.className = isDarkMode 
@@ -532,17 +543,36 @@
                                 cell.appendChild(subItem);
                             });
                         } else {
+                            // 情況 B：正常單一行程，計算它在目前顯示範圍內跨越了多少個 30 分鐘格子，進行格子合併！
                             const c = slotCourses[0];
+                            
+                            // 算出該行程在目前過濾範圍內的實際渲染跨度
+                            const renderStart = Math.max(c.start, displayStart);
+                            const renderEnd = Math.min(c.end, displayEnd);
+                            const slotsCount = (renderEnd - renderStart) / 0.5;
+
+                            // 透過 CSS grid 的 grid-row-end 屬性動態縱向跨度合併
+                            cell.style.gridRow = `span ${slotsCount}`;
+                            cell.className = 'p-1 flex flex-col items-stretch justify-center w-full h-full';
+
+                            // 標記接下來被這個長度覆蓋的格子
+                            for (let t = renderStart + 0.5; t < renderEnd; t += 0.5) {
+                                coveredSlots[`${day}-${t}`] = true;
+                            }
+
                             const subItem = document.createElement('div');
-                            subItem.className = isDarkMode
-                                ? 'flex-1 bg-blue-950/90 text-blue-100 border border-blue-700 rounded-xl flex items-center justify-center p-2.5 font-bold text-center cursor-pointer shadow-md hover:scale-[1.02] transition-all w-full break-all'
-                                : 'flex-1 bg-blue-50 text-blue-700 border border-blue-100 rounded-xl flex items-center justify-center p-2.5 font-bold text-center cursor-pointer shadow-md hover:scale-[1.02] transition-all w-full break-all';
+                            // 獲取指派的隨機配色，如無則預設為 0
+                            const themeColors = colorPalette[c.colorIndex || 0];
+                            const currentThemeClass = isDarkMode ? themeColors.dark : themeColors.light;
+
+                            subItem.className = `w-full h-full border rounded-xl flex items-center justify-center p-2.5 font-bold text-center cursor-pointer shadow-md hover:scale-[1.01] transition-all break-all`;
+                            subItem.classList.add(...currentThemeClass.split(' '));
                             subItem.innerHTML = `<span>${c.name}</span>`;
                             subItem.setAttribute('onclick', `openModal(null, null, ${c.id})`);
                             cell.appendChild(subItem);
                         }
                     } else {
-                        // 空白空格設計，增加 Hover 時的邊框發光感，告別單調
+                        // 情況 C：空白格
                         cell.className = isDarkMode
                             ? 'p-1 hover:bg-slate-800 text-transparent hover:text-white transition-all cursor-pointer flex items-center justify-center border border-dashed border-slate-800 hover:border-slate-600 rounded-xl min-h-[46px] font-extrabold text-base'
                             : 'p-1 hover:bg-slate-100 text-transparent hover:text-slate-400 transition-all cursor-pointer flex items-center justify-center border border-dashed border-slate-200 hover:border-slate-400 rounded-xl min-h-[46px] font-extrabold text-base';
@@ -573,21 +603,20 @@
                 let subColorClass = isDarkMode ? 'text-slate-400' : 'text-slate-500';
                 let borderClashClass = isDarkMode ? 'border-slate-800 bg-slate-950 hover:border-slate-700' : 'border-slate-100 bg-slate-50 hover:border-slate-200';
 
-                // 如果相撞，強制把字體轉成鮮紅色
                 if (isClashed) {
                     textColorClass = 'text-red-500 font-extrabold';
                     subColorClass = 'text-red-400 font-bold';
                     borderClashClass = isDarkMode ? 'border-red-900/80 bg-red-950/40' : 'border-red-200 bg-red-50/60';
                 }
 
-                li.className = `flex justify-between items-center p-3 rounded-xl border shadow-sm transition-all duration-150 ${borderClashClass}`;
+                li.className = `flex justify-between items-center p-2 rounded-xl border shadow-sm transition-all duration-150 ${borderClashClass}`;
                 
                 li.innerHTML = `
                     <span class="truncate mr-2 cursor-pointer flex-1 font-medium" onclick="openModal(null, null, ${c.id})">
-                        <strong class="text-sm sm:text-base ${textColorClass}">${c.name}</strong><br>
-                        <span class="text-xs font-semibold ${subColorClass}">${langPack[currentLang].days[c.day]} ${formatTime(c.start)} - ${formatTime(c.end)}</span>
+                        <strong class="text-xs sm:text-sm ${textColorClass}">${c.name}</strong>
+                        <span class="text-[11px] font-semibold ${subColorClass} ml-2">(${langPack[currentLang].days[c.day].split(' ')[0]} ${formatTime(c.start)}-${formatTime(c.end)})</span>
                     </span>
-                    <button onclick="deleteCourse(${c.id}); event.stopPropagation();" class="text-red-400 hover:text-red-600 font-bold p-1.5 cursor-pointer border-none bg-transparent text-sm sm:text-base transition">❌</button>
+                    <button onclick="deleteCourse(${c.id}); event.stopPropagation();" class="text-red-400 hover:text-red-600 font-bold px-1 cursor-pointer border-none bg-transparent text-xs sm:text-sm transition">❌</button>
                 `;
                 list.appendChild(li);
             });
