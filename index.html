@@ -9,21 +9,23 @@
     <style>
         .timetable-grid {
             display: grid;
-            grid-template-columns: 80px repeat(5, minmax(120px, 1fr));
+            /* 時間欄 + 7個星期欄 */
+            grid-template-columns: 80px repeat(7, minmax(100px, 1fr));
         }
     </style>
 </head>
-<body class="bg-slate-50 font-sans p-4 md:p-8">
+<body class="bg-slate-50 font-sans p-4 md:p-6">
 
-    <div class="max-w-6xl mx-auto">
-        <div class="text-center mb-8">
+    <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-6">
             <h1 class="text-3xl font-bold text-slate-800 mb-2">🎓 大學生 Reg 科排課時間表</h1>
-            <p class="text-slate-600">無痛排課、自動檢查撞堂，助你排出完美 Day-off！</p>
+            <p class="text-slate-600">網格支援【直接點擊】排課！包含週末與半小時制，輕鬆排出完美 Time-table！</p>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit">
-                <h2 class="text-xl font-bold text-slate-700 mb-4">➕ 新增課程</h2>
+        <div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 h-fit xl:col-span-1">
+                <h2 class="text-xl font-bold text-slate-700 mb-3">➕ 新增 / 編輯課程</h2>
+                <p class="text-xs text-slate-400 mb-4">💡 提示：也可以直接點擊右邊課表空白格快速填寫時間。</p>
                 
                 <div class="space-y-4">
                     <div>
@@ -39,6 +41,8 @@
                             <option value="3">星期三 (Wed)</option>
                             <option value="4">星期四 (Thu)</option>
                             <option value="5">星期五 (Fri)</option>
+                            <option value="6">星期六 (Sat)</option>
+                            <option value="7">星期日 (Sun)</option>
                         </select>
                     </div>
 
@@ -53,34 +57,36 @@
                         </div>
                     </div>
 
-                    <button onclick="addCourse()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg transition duration-200 cursor-pointer">
+                    <button onclick="addCourse()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg transition duration-200 cursor-pointer text-center">
                         加入時間表
                     </button>
                 </div>
 
-                <div class="mt-8">
-                    <h3 class="text-md font-bold text-slate-700 mb-2">已加課程清單</h3>
-                    <ul id="courseList" class="space-y-2 max-h-60 overflow-y-auto text-sm">
+                <div class="mt-6 border-t border-slate-100 pt-4">
+                    <h3 class="text-sm font-bold text-slate-700 mb-2">已加課程</h3>
+                    <ul id="courseList" class="space-y-2 max-h-48 overflow-y-auto text-xs">
                         </ul>
                 </div>
             </div>
 
-            <div class="lg:col-span-2">
-                <div class="flex justify-between items-center mb-4">
-                    <span class="text-sm text-slate-500">💡 提示：同一個時間加超過一堂會自動變紅色警告撞堂！</span>
-                    <button onclick="downloadTimetable()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition cursor-pointer">
+            <div class="xl:col-span-3">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
+                    <span class="text-xs text-slate-500">⚠️ 同一時段重複加課會觸發紅色撞堂警告。</span>
+                    <button onclick="downloadTimetable()" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition cursor-pointer text-center">
                         📸 下載時間表截圖
                     </button>
                 </div>
 
                 <div id="timetableCapture" class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 overflow-x-auto">
-                    <div class="timetable-grid border-b border-slate-100 pb-2 text-center font-bold text-slate-700 text-sm">
+                    <div class="timetable-grid border-b border-slate-200 pb-2 text-center font-bold text-slate-700 text-xs gap-1">
                         <div>時間</div>
-                        <div>Mon</div>
-                        <div>Tue</div>
-                        <div>Wed</div>
-                        <div>Thu</div>
-                        <div>Fri</div>
+                        <div class="text-blue-600">Mon</div>
+                        <div class="text-blue-600">Tue</div>
+                        <div class="text-blue-600">Wed</div>
+                        <div class="text-blue-600">Thu</div>
+                        <div class="text-blue-600">Fri</div>
+                        <div class="text-amber-600">Sat</div>
+                        <div class="text-amber-600">Sun</div>
                     </div>
 
                     <div id="timetableRows" class="divide-y divide-slate-100">
@@ -91,53 +97,67 @@
     </div>
 
     <script>
-        // 初始化時間選單 (09:00 至 18:00)
+        // 生成半小時時間選項 (9.0 代表 09:00, 9.5 代表 09:30)
         const startSelect = document.getElementById('startTime');
         const endSelect = document.getElementById('endTime');
         
-        for(let i = 9; i <= 18; i++) {
-            let hour = i < 10 ? '0' + i : i;
-            startSelect.options.add(new Option(`${hour}:00`, i));
-            endSelect.options.add(new Option(`${hour}:00`, i));
+        function formatTime(val) {
+            let h = Math.floor(val);
+            let m = (val % 1 === 0) ? '00' : '30';
+            return `${h < 10 ? '0' + h : h}:${m}`;
+        }
+
+        for(let i = 9; i <= 18.5; i += 0.5) {
+            startSelect.options.add(new Option(formatTime(i), i));
+            endSelect.options.add(new Option(formatTime(i + 0.5), i + 0.5));
         }
         endSelect.value = 12; // 預設結束時間
 
-        // 儲存課程的陣列
         let courses = [];
 
-        // 生成課表格子
+        // 點擊課表格子觸發：自動代入星期和時間
+        function selectSlot(day, timeValue) {
+            document.getElementById('courseDay').value = day;
+            document.getElementById('startTime').value = timeValue;
+            document.getElementById('endTime').value = timeValue + 1; // 預設選 1 小時堂
+            document.getElementById('courseName').focus();
+        }
+
+        // 渲染課表
         function renderTimetable() {
             const rowsContainer = document.getElementById('timetableRows');
             rowsContainer.innerHTML = '';
 
-            for (let hour = 9; hour < 18; hour++) {
+            for (let time = 9; time <= 18.5; time += 0.5) {
                 const row = document.createElement('div');
-                row.className = 'timetable-grid min-h-[60px] items-stretch text-center text-xs';
+                row.className = 'timetable-grid min-h-[45px] items-stretch text-center text-[11px] gap-1';
                 
                 // 時間標籤
                 const timeLabel = document.createElement('div');
-                timeLabel.className = 'flex items-center justify-center border-r border-slate-100 text-slate-400';
-                timeLabel.innerText = `${hour}:00`;
+                timeLabel.className = 'flex items-center justify-center border-r border-slate-100 text-slate-400 font-mono bg-slate-50';
+                timeLabel.innerText = formatTime(time);
                 row.appendChild(timeLabel);
 
-                // 五日格子
-                for (let day = 1; day <= 5; day++) {
+                // 7日網格
+                for (let day = 1; day <= 7; day++) {
                     const cell = document.createElement('div');
-                    cell.className = 'p-1 border-r border-slate-50 last:border-0 flex flex-col justify-center gap-1 min-h-[60px]';
                     
-                    // 找出屬於這天這個時段的課程
-                    const slotCourses = courses.filter(c => c.day == day && hour >= c.start && hour < c.end);
+                    // 篩選出覆蓋目前半小時時段的課程
+                    const slotCourses = courses.filter(c => c.day == day && time >= c.start && time < c.end);
 
                     if (slotCourses.length > 0) {
                         if (slotCourses.length > 1) {
-                            // 撞堂顯示紅色
-                            cell.className += ' bg-red-50 text-red-700 font-semibold border-2 border-red-300 rounded-lg m-0.5';
-                            cell.innerHTML = `⚠️ 撞堂!<br>${slotCourses.map(c => c.name).join(' + ')}`;
+                            cell.className = 'p-1 bg-red-50 text-red-700 font-semibold border border-red-300 rounded flex items-center justify-center';
+                            cell.innerHTML = `⚠️ 撞堂!`;
                         } else {
-                            // 正常課程顯示藍色
-                            cell.className += ' bg-blue-50 text-blue-700 rounded-lg m-0.5 border border-blue-100';
-                            cell.innerHTML = `<span class="font-bold">${slotCourses[0].name}</span>`;
+                            cell.className = 'p-1 bg-blue-50 text-blue-700 border border-blue-100 rounded flex items-center justify-center font-medium';
+                            cell.innerHTML = `<span>${slotCourses[0].name}</span>`;
                         }
+                    } else {
+                        // 空白網格：可以點擊
+                        cell.className = 'p-1 hover:bg-slate-100 text-transparent hover:text-slate-400 transition cursor-pointer flex items-center justify-center border border-dashed border-slate-100 rounded';
+                        cell.innerText = '＋';
+                        cell.setAttribute('onclick', `selectSlot(${day}, ${time})`);
                     }
                     row.appendChild(cell);
                 }
@@ -149,8 +169,8 @@
         function addCourse() {
             const name = document.getElementById('courseName').value.trim();
             const day = document.getElementById('courseDay').value;
-            const start = parseInt(document.getElementById('startTime').value);
-            const end = parseInt(document.getElementById('endTime').value);
+            const start = parseFloat(document.getElementById('startTime').value);
+            const end = parseFloat(document.getElementById('endTime').value);
 
             if (!name) {
                 alert('請輸入課程名稱！');
@@ -164,9 +184,7 @@
             const newCourse = { id: Date.now(), name, day, start, end };
             courses.push(newCourse);
             
-            // 清空輸入框
             document.getElementById('courseName').value = '';
-
             updateUI();
         }
 
@@ -176,26 +194,25 @@
             updateUI();
         }
 
-        // 更新左側清單與右側課表
+        // 更新數據
         function updateUI() {
             renderTimetable();
             
             const list = document.getElementById('courseList');
             list.innerHTML = '';
             
-            const dayNames = ['', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+            const dayNames = ['', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
             courses.forEach(c => {
                 const li = document.createElement('li');
                 li.className = 'flex justify-between items-center bg-slate-100 p-2 rounded-lg';
                 li.innerHTML = `
-                    <span><strong>${c.name}</strong> (${dayNames[c.day]} ${c.start}:00-${c.end}:00)</span>
+                    <span class="truncate mr-1"><strong>${c.name}</strong><br><span class="text-slate-500">${dayNames[c.day]} ${formatTime(c.start)}-${formatTime(c.end)}</span></span>
                     <button onclick="deleteCourse(${c.id})" class="text-red-500 hover:text-red-700 font-bold px-1 cursor-pointer">❌</button>
                 `;
                 list.appendChild(li);
             });
         }
 
-        // 一鍵截圖下載
         function downloadTimetable() {
             const target = document.getElementById('timetableCapture');
             html2canvas(target).then(canvas => {
@@ -206,7 +223,6 @@
             });
         }
 
-        // 首次載入初始化空課表
         renderTimetable();
     </script>
 </body>
