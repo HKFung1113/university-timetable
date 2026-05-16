@@ -58,20 +58,20 @@
 
             <div id="panel-list" class="bg-white p-5 rounded-2xl shadow-md border border-slate-200/80 transition-all">
                 <h2 id="txt-list-title" class="text-base font-bold mb-1 text-slate-900">📝 我的每週行程一覽</h2>
-                <p id="txt-list-tip" class="text-[11px] text-slate-400 mb-2 font-medium">💡 點擊可修改。**可直接拖曳下方清單中的行程投放到時間表空格！**</p>
+                <p id="txt-list-tip" class="text-[11px] text-slate-400 mb-2 font-medium">💡 點擊可修改。**可直接拖曳下方清單中的行程投投放至時間表空格！**</p>
                 <ul id="courseList" class="space-y-2 max-h-[135px] overflow-y-auto pr-1 text-sm">
                     </ul>
             </div>
 
             <div id="panel-notes" class="bg-white p-5 rounded-2xl shadow-md border border-slate-200/80 transition-all w-full flex flex-col justify-between">
                 <h3 id="txt-notes-title" class="text-base font-bold mb-1.5 text-slate-900">📌 本週備忘錄 / 週計畫 To-Do</h3>
-                <textarea id="weeklyNotes" oninput="saveNotes()" rows="4" placeholder="在此輸入本週待辦事項、考試重點或生活備忘錄...（資料會自動儲存）" class="w-full flex-1 p-3 border border-slate-300 rounded-xl bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium text-xs sm:text-sm transition-all resize-none"></textarea>
+                <textarea id="weeklyNotes" oninput="saveNotes()" rows="4" placeholder="在此輸入本週待辦事項...（資料會自動儲存）" class="w-full flex-1 p-3 border border-slate-300 rounded-xl bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium text-xs sm:text-sm transition-all resize-none"></textarea>
             </div>
         </div>
 
         <div class="w-full space-y-3 pt-4 mx-auto">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                <span id="txt-clash-alert" class="text-xs sm:text-sm text-slate-500 font-medium">⚠️ 同一時段重複加行程會觸發紅色撞時間警告。</span>
+                <span id="txt-clash-alert" class="text-xs sm:text-sm text-slate-500 font-medium">⚠️ 同一時段重複加行程會並排顯示並觸發撞時間提示。</span>
                 <button onclick="downloadTimetable()" id="btn-screenshot" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md hover:shadow-lg transition cursor-pointer text-center border-none">
                     📸 下載時間表截圖
                 </button>
@@ -103,6 +103,12 @@
                 <div>
                     <label id="modal-label-name" class="block text-sm font-semibold text-slate-500 mb-1.5">項目 / 行程名稱</label>
                     <input type="text" id="modalCourseName" placeholder="" class="w-full px-3 py-3 border border-slate-300 rounded-xl bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium text-sm sm:text-base">
+                </div>
+
+                <div>
+                    <label id="modal-label-color" class="block text-sm font-semibold text-slate-500 mb-1.5">選擇行程顏色</label>
+                    <div id="colorPickerContainer" class="flex gap-2.5 py-1">
+                        </div>
                 </div>
 
                 <div>
@@ -148,12 +154,13 @@
                 subtitle: "網格支援【直接點擊】！輕鬆規劃你的完美每週行程！",
                 listTitle: "📝 我的每週行程一覽",
                 listTip: "💡 點擊可修改。**可直接拖曳下方清單中的行程投放到時間表空格！**",
-                clashAlert: "⚠️ 同一時段重複加行程會觸發紅色撞時間警告。",
+                clashAlert: "⚠️ 同一時段重複加行程會並排顯示並觸發撞時間提示。",
                 screenshot: "📸 下載時間表截圖",
                 time: "時間",
                 modalTitleAdd: "➕ 新增行程資料",
                 modalTitleEdit: "✏️ 修改行程資料",
                 labelName: "項目 / 行程名稱",
+                labelColor: "選擇行程顏色",
                 labelDay: "星期幾",
                 labelStart: "開始時間",
                 labelEnd: "結束時間",
@@ -185,6 +192,7 @@
                 modalTitleAdd: "➕ 新增行程资料",
                 modalTitleEdit: "✏️ 修改行程资料",
                 labelName: "项目 / 行程名称",
+                labelColor: "选择行程颜色",
                 labelDay: "星期几",
                 labelStart: "开始时间",
                 labelEnd: "结束时间",
@@ -216,6 +224,7 @@
                 modalTitleAdd: "➕ Add New Event",
                 modalTitleEdit: "✏️ Edit Event Details",
                 labelName: "Event Name",
+                labelColor: "Select Event Color",
                 labelDay: "Day of the Week",
                 labelStart: "Start Time",
                 labelEnd: "End Time",
@@ -238,18 +247,21 @@
             }
         };
 
+        // 5種精美色系定義
         const colorPalette = [
-            { light: 'bg-blue-50 text-blue-700 border-blue-200', dark: 'bg-blue-950/90 text-blue-100 border-blue-700' },
-            { light: 'bg-emerald-50 text-emerald-700 border-emerald-200', dark: 'bg-emerald-950/90 text-emerald-100 border-emerald-700' },
-            { light: 'bg-purple-50 text-purple-700 border-purple-200', dark: 'bg-purple-950/90 text-purple-100 border-purple-700' },
-            { light: 'bg-orange-50 text-orange-700 border-orange-200', dark: 'bg-orange-950/90 text-orange-100 border-orange-700' },
-            { light: 'bg-fuchsia-50 text-fuchsia-700 border-fuchsia-200', dark: 'bg-fuchsia-950/90 text-fuchsia-100 border-fuchsia-700' }
+            { name: '藍色', preview: 'bg-blue-500', light: 'bg-blue-50 text-blue-700 border-blue-200', dark: 'bg-blue-950 text-blue-100 border-blue-800' },
+            { name: '綠色', preview: 'bg-emerald-500', light: 'bg-emerald-50 text-emerald-700 border-emerald-200', dark: 'bg-emerald-950 text-emerald-100 border-emerald-800' },
+            { name: '紫色', preview: 'bg-purple-500', light: 'bg-purple-50 text-purple-700 border-purple-200', dark: 'bg-purple-950 text-purple-100 border-purple-800' },
+            { name: '橘色', preview: 'bg-orange-500', light: 'bg-orange-50 text-orange-700 border-orange-200', dark: 'bg-orange-950 text-orange-100 border-orange-800' },
+            { name: '粉色', preview: 'bg-fuchsia-500', light: 'bg-fuchsia-50 text-fuchsia-700 border-fuchsia-200', dark: 'bg-fuchsia-950 text-fuchsia-100 border-fuchsia-800' }
         ];
 
         let currentLang = 'zh';
         let courses = [];
         let isDarkMode = false;
         let editingCourseId = null;
+        let selectedColorIndex = 0; // 當前選中的顏色索引
+        let autoColorCounter = 0;   // 用於自動輪流分配顏色
         
         let displayStart = 9;
         let displayEnd = 21;
@@ -446,6 +458,7 @@
             document.getElementById('txt-dark-btn').innerText = isDarkMode ? p.darkBtnOff : p.darkBtnOn;
             
             document.getElementById('modal-label-name').innerText = p.labelName;
+            document.getElementById('modal-label-color').innerText = p.labelColor;
             document.getElementById('modal-label-day').innerText = p.labelDay;
             document.getElementById('modal-label-start').innerText = p.labelStart;
             document.getElementById('modal-label-end').innerText = p.labelEnd;
@@ -499,6 +512,27 @@
             }
         }
 
+        // 渲染選色按鈕
+        function renderColorPicker() {
+            const container = document.getElementById('colorPickerContainer');
+            container.innerHTML = '';
+            colorPalette.forEach((color, idx) => {
+                const btn = document.createElement('button');
+                btn.type = "button";
+                btn.className = `w-8 h-8 rounded-full ${color.preview} cursor-pointer border-3 transition-all transform hover:scale-110`;
+                if (idx === selectedColorIndex) {
+                    btn.classList.add('border-slate-900', 'ring-2', 'ring-offset-2', 'ring-blue-500');
+                } else {
+                    btn.classList.add('border-transparent');
+                }
+                btn.onclick = () => {
+                    selectedColorIndex = idx;
+                    renderColorPicker();
+                };
+                container.appendChild(btn);
+            });
+        }
+
         function openModal(day, timeValue, courseId = null) {
             editingCourseId = courseId;
             const p = langPack[currentLang];
@@ -511,6 +545,7 @@
                 if (target) {
                     document.getElementById('modalCourseName').value = target.name;
                     document.getElementById('modalCourseDay').value = target.day;
+                    selectedColorIndex = target.colorIndex !== undefined ? target.colorIndex : 0;
                     startSelect.value = target.start;
                     
                     endSelect.innerHTML = '';
@@ -525,9 +560,15 @@
                 
                 document.getElementById('modalCourseDay').value = day;
                 startSelect.value = timeValue;
+                
+                // 【自動輪流選色邏輯】：每次點擊新增，自動選取下一個顏色索引，避免重複色
+                selectedColorIndex = autoColorCounter % colorPalette.length;
+                autoColorCounter++;
+                
                 onModalStartChange();
             }
 
+            renderColorPicker();
             updateDropdownStyles();
             document.getElementById('courseModal').classList.remove('hidden');
             document.getElementById('modalCourseName').focus();
@@ -561,10 +602,10 @@
                     target.day = day;
                     target.start = start;
                     target.end = end;
+                    target.colorIndex = selectedColorIndex;
                 }
             } else {
-                const randomColorIndex = Math.floor(Math.random() * colorPalette.length);
-                courses.push({ id: Date.now(), name, day, start, end, colorIndex: randomColorIndex });
+                courses.push({ id: Date.now(), name, day, start, end, colorIndex: selectedColorIndex });
             }
 
             closeModal();
@@ -605,7 +646,6 @@
             gridBody.innerHTML = '';
 
             const borderStyle = isDarkMode ? 'border-slate-800' : 'border-slate-200/60';
-            const cellOccupied = {};
             let rowIndex = 2; 
             
             for (let time = displayStart; time <= displayEnd; time += 0.5) {
@@ -623,66 +663,37 @@
                 }
 
                 for (let day = 1; day <= 7; day++) {
-                    const cellKey = `${day}-${time}`;
-                    
-                    if (cellOccupied[cellKey]) {
-                        continue; 
-                    }
+                    if (isLastRow) continue;
 
-                    if (isLastRow) {
-                        continue; 
-                    }
-
+                    // 找出涵蓋目前這半小時時段的所有行程
                     const slotCourses = courses.filter(c => c.day == day && time >= c.start && time < c.end).sort((a,b) => a.id - b.id);
                     
                     const cell = document.createElement('div');
                     cell.setAttribute('ondragover', 'handleDragOver(event)');
                     cell.setAttribute('ondrop', `handleDrop(event, ${day}, ${time})`);
                     cell.style.gridColumn = `${day + 1}`;
+                    cell.style.gridRow = `${rowIndex}`;
 
                     if (slotCourses.length > 0) {
-                        // 找到該組重疊行程中，覆蓋範圍最早/最長的代表
-                        const mainCourse = slotCourses[0];
-                        const renderStart = Math.max(mainCourse.start, displayStart);
-                        const renderEnd = Math.min(mainCourse.end, displayEnd);
-
-                        if (time === renderStart) {
-                            const slotsCount = (renderEnd - renderStart) / 0.5;
-                            cell.style.gridRow = `${rowIndex} / span ${slotsCount}`;
-                            cell.className = `p-1 flex flex-col items-stretch justify-center border-b ${borderStyle}`;
-
-                            for (let t = renderStart; t < renderEnd; t += 0.5) {
-                                cellOccupied[`${day}-${t}`] = true;
-                            }
-
+                        // 【防遮擋核心修正】：不再合併大跨行(span)，直接在該時間格內垂直並排渲染當前時段內的所有行程
+                        cell.className = `p-1 flex flex-col justify-start gap-1 border-b border-r ${borderStyle} min-h-[55px] w-full`;
+                        
+                        slotCourses.forEach(course => {
                             const subItem = document.createElement('div');
+                            const themeColors = colorPalette[course.colorIndex !== undefined ? course.colorIndex : 0];
+                            const currentThemeClass = isDarkMode ? themeColors.dark : themeColors.light;
                             
-                            // 【關鍵修正】：如果有多於一個行程，不再只有單一名稱，而是並排全部列出，避免 cover 問題
-                            if (slotCourses.length > 1) {
-                                subItem.className = isDarkMode 
-                                    ? 'w-full h-full bg-red-950/90 text-red-200 border-2 border-red-500 rounded-xl flex flex-col items-center justify-center gap-1 p-2 font-bold text-center cursor-pointer shadow-md hover:scale-[1.01] transition-all break-all min-h-[46px]'
-                                    : 'w-full h-full bg-red-50 text-red-700 border-2 border-red-400 rounded-xl flex flex-col items-center justify-center gap-1 p-2 font-bold text-center cursor-pointer shadow-md hover:scale-[1.01] transition-all break-all min-h-[46px]';
-                                
-                                // 將所有在此時段重疊的行程名稱串接出來
-                                let namesHtml = slotCourses.map(c => `<div class="w-full truncate border-b border-dashed border-red-300/30 last:border-none pb-0.5 last:pb-0">${c.name}</div>`).join('');
-                                subItem.innerHTML = namesHtml;
-                                subItem.setAttribute('onclick', `openModal(null, null, ${mainCourse.id})`);
-                            } else {
-                                const themeColors = colorPalette[mainCourse.colorIndex || 0];
-                                const currentThemeClass = isDarkMode ? themeColors.dark : themeColors.light;
-                                subItem.className = `w-full h-full border rounded-xl flex items-center justify-center p-2 font-bold text-center cursor-pointer shadow-md hover:scale-[1.01] transition-all break-all min-h-[46px]`;
-                                subItem.classList.add(...currentThemeClass.split(' '));
-                                subItem.innerHTML = `<span>${mainCourse.name}</span>`;
-                                subItem.setAttribute('onclick', `openModal(null, null, ${mainCourse.id})`);
-                            }
+                            // 加上特別提示如果是撞時間行程（紅框）
+                            const clashBorder = slotCourses.length > 1 ? 'border-red-500 border-2 shadow-sm' : 'border';
                             
+                            subItem.className = `${currentThemeClass} ${clashBorder} text-xs w-full rounded-lg flex items-center justify-center p-1.5 font-bold text-center cursor-pointer hover:scale-[1.02] transition-all break-all min-h-[30px]`;
+                            subItem.innerHTML = `<span class="truncate">${course.name}</span>`;
+                            subItem.setAttribute('onclick', `openModal(null, null, ${course.id})`);
                             cell.appendChild(subItem);
-                        } else {
-                            continue;
-                        }
+                        });
                     } else {
+                        // 空白格顯示 ＋ 號
                         cell.className = `p-1 border-b border-r ${borderStyle} min-h-[55px] flex items-stretch justify-center`;
-                        cell.style.gridRow = `${rowIndex}`;
 
                         const addBtn = document.createElement('div');
                         addBtn.className = isDarkMode
@@ -766,14 +777,18 @@
                     borderClashClass = isDarkMode ? 'border-red-900/80 bg-red-950/40' : 'border-red-200 bg-red-50/60';
                 }
 
+                // 獲取該行程自訂顏色的圓點
+                const themeColors = colorPalette[c.colorIndex !== undefined ? c.colorIndex : 0];
+
                 li.setAttribute('draggable', 'true');
                 li.setAttribute('ondragstart', `handleDragStart(event, ${c.id})`);
                 li.className = `flex justify-between items-center p-2 rounded-xl border shadow-sm cursor-move active:opacity-50 transition-all duration-150 ${borderClashClass}`;
                 
                 li.innerHTML = `
-                    <span class="truncate mr-2 flex-1 font-medium cursor-pointer" onclick="openModal(null, null, ${c.id})">
-                        <strong class="text-xs sm:text-sm ${textColorClass}">☰ ${c.name}</strong>
-                        <span class="text-[11px] font-semibold ${subColorClass} ml-2">(${langPack[currentLang].days[c.day].split(' ')[0]} ${formatTime(c.start)}-${formatTime(c.end)})</span>
+                    <span class="truncate mr-2 flex-1 font-medium cursor-pointer flex items-center gap-2" onclick="openModal(null, null, ${c.id})">
+                        <span class="w-3 h-3 rounded-full ${themeColors.preview} shrink-0"></span>
+                        <strong class="text-xs sm:text-sm ${textColorClass} truncate">☰ ${c.name}</strong>
+                        <span class="text-[11px] font-semibold ${subColorClass} shrink-0">(${langPack[currentLang].days[c.day].split(' ')[0]} ${formatTime(c.start)}-${formatTime(c.end)})</span>
                     </span>
                     <button onclick="deleteCourse(${c.id}); event.stopPropagation();" class="text-red-400 hover:text-red-600 font-bold px-1 cursor-pointer border-none bg-transparent text-xs sm:text-sm transition">❌</button>
                 `;
