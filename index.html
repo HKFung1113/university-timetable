@@ -64,7 +64,7 @@
 
             <div id="panel-list" class="bg-white p-5 rounded-2xl shadow-md border border-slate-200/80">
                 <h2 id="txt-list-title" class="text-base font-bold mb-1 text-slate-900">📝 我的每週行程一覽</h2>
-                <p id="txt-list-tip" class="text-[11px] text-slate-400 mb-2 font-medium">💡 點擊可修改。支援從清單拖放至空白格子！</p>
+                <p id="txt-list-tip" class="text-[11px] text-slate-400 mb-2 font-medium">💡 點擊行程名稱即可進行修改或調整時間。</p>
                 <ul id="courseList" class="space-y-2 max-h-[135px] overflow-y-auto pr-1 text-sm"></ul>
             </div>
 
@@ -152,7 +152,7 @@
         const langPack = {
             zh: {
                 title: "📅 自訂行程時間表", subtitle: "網格支援【直接點擊】！輕鬆規劃你的完美每週行程！",
-                listTitle: "📝 我的每週行程一覽", listTip: "💡 點擊可修改。支援從清單拖放至空白格子！",
+                listTitle: "📝 我的每週行程一覽", listTip: "💡 點擊行程名稱即可進行修改或調整時間。",
                 clashAlert: "⚠️ 同一時段重複加行程會並排大格顯示並觸發提示。", screenshot: "📸 下載時間表截圖", time: "時間",
                 modalTitleAdd: "➕ 新增行程資料", modalTitleEdit: "✏️ 修改行程資料",
                 labelName: "項目 / 行程名稱", labelColor: "選擇行程顏色", labelDay: "星期幾", labelStart: "開始時間", labelEnd: "結束時間",
@@ -165,7 +165,7 @@
             },
             cn: {
                 title: "📅 自定义行程时间表", subtitle: "网格支持【直接点击】！轻松规划你的完美每周行程！",
-                listTitle: "📝 我的每周行程一览", listTip: "💡 点击可修改。支援从清单拖放至空白格子！",
+                listTitle: "📝 我的每周行程一览", listTip: "💡 点击行程名称即可进行修改或调整时间。",
                 clashAlert: "⚠️ 同一时段重复加行程会并排大格显示并触发提示。", screenshot: "📸 下载时间表截图", time: "时间",
                 modalTitleAdd: "➕ 新增行程资料", modalTitleEdit: "✏️ 修改行程资料",
                 labelName: "项目 / 行程名称", labelColor: "选择行程颜色", labelDay: "星期几", labelStart: "开始时间", labelEnd: "结束时间",
@@ -178,7 +178,7 @@
             },
             en: {
                 title: "📅 Custom Weekly Schedule Planner", subtitle: "Click any grid cell directly to schedule! Plan your perfect week easily!",
-                listTitle: "📝 My Weekly Overview", listTip: "💡 Tip: Drag events from the list and drop them onto blank grid cells!",
+                listTitle: "📝 My Weekly Overview", listTip: "💡 Click event name to edit details or adjust timings.",
                 clashAlert: "⚠️ Adding multiple events to the same slot will display them side-by-side as large cards.", screenshot: "📸 Download Timetable Screenshot", time: "Time",
                 modalTitleAdd: "➕ Add New Event", modalTitleEdit: "✏️ Edit Event Details",
                 labelName: "Event Name", labelColor: "Select Event Color", labelDay: "Day of the Week", labelStart: "Start Time", labelEnd: "End Time",
@@ -191,7 +191,6 @@
             }
         };
 
-        // 擴充至 12 個精緻色彩庫
         const colorPalette = [
             { name: '藍色', preview: 'bg-blue-500', light: 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100', dark: 'bg-blue-950/80 text-blue-100 border-blue-800 hover:bg-blue-900/80' },
             { name: '綠色', preview: 'bg-emerald-500', light: 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100', dark: 'bg-emerald-950/80 text-emerald-100 border-emerald-800 hover:bg-emerald-900/80' },
@@ -344,8 +343,6 @@
                     const cell = document.createElement('div');
                     cell.className = `border-b border-r ${borderStyle} time-slot-row p-1 flex items-stretch justify-center`;
                     cell.style.gridColumn = `${day + 1}`; cell.style.gridRow = `${currentRow}`;
-                    cell.setAttribute('ondragover', 'handleDragOver(event)');
-                    cell.setAttribute('ondrop', `handleDrop(event, ${day}, ${time})`);
 
                     const addBtn = document.createElement('div');
                     addBtn.className = `w-full h-full text-transparent hover:text-slate-400 font-extrabold text-base rounded-xl border border-dashed flex items-center justify-center cursor-pointer transition-all ${isDarkMode ? 'hover:bg-slate-800 border-slate-800 hover:border-slate-600' : 'hover:bg-slate-100 border-slate-200 hover:border-slate-400'}`;
@@ -419,19 +416,6 @@
             }
         }
 
-        function handleDragStart(e, id) { e.dataTransfer.setData("text/plain", id); e.dataTransfer.effectAllowed = "move"; }
-        function handleDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = "move"; }
-        function handleDrop(e, targetDay, targetTime) {
-            e.preventDefault(); const id = parseInt(e.dataTransfer.getData("text/plain"));
-            const targetCourse = courses.find(c => c.id === id);
-            if (targetCourse) {
-                const duration = targetCourse.end - targetCourse.start;
-                targetCourse.day = targetDay; targetCourse.start = targetTime; targetCourse.end = targetTime + duration;
-                if (targetCourse.end > 24) targetCourse.end = 24;
-                updateUI();
-            }
-        }
-
         function deleteCourse(id) { courses = courses.filter(c => c.id !== id); updateUI(); }
         function clearAllCourses() { if (confirm(langPack[currentLang].confirmClear)) { courses = []; updateUI(); } }
         function exportJSON() {
@@ -457,12 +441,11 @@
                 let borderClashClass = isDarkMode ? 'border-slate-800 bg-slate-950 hover:border-slate-700' : 'border-slate-100 bg-slate-50 hover:border-slate-200';
                 const themeColors = colorPalette[c.colorIndex !== undefined ? c.colorIndex : 0] || colorPalette[0];
 
-                li.setAttribute('draggable', 'true'); li.setAttribute('ondragstart', `handleDragStart(event, ${c.id})`);
-                li.className = `flex justify-between items-center p-2 rounded-xl border shadow-sm cursor-move active:opacity-50 transition-all ${borderClashClass}`;
+                li.className = `flex justify-between items-center p-2 rounded-xl border shadow-sm transition-all ${borderClashClass}`;
                 li.innerHTML = `
                     <span class="truncate mr-2 flex-1 font-medium cursor-pointer flex items-center gap-2" onclick="openModal(null, null, ${c.id})">
                         <span class="w-3 h-3 rounded-full ${themeColors.preview} shrink-0"></span>
-                        <strong class="text-xs sm:text-sm truncate">☰ ${c.name}</strong>
+                        <strong class="text-xs sm:text-sm truncate">${c.name}</strong>
                         <span class="text-[11px] font-semibold text-slate-400 shrink-0">(${langPack[currentLang].days[c.day].split(' ')[0]} ${formatTime(c.start)}-${formatTime(c.end)})</span>
                     </span>
                     <button onclick="deleteCourse(${c.id}); event.stopPropagation();" class="text-red-400 hover:text-red-600 font-bold px-1 bg-transparent border-none text-xs sm:text-sm transition">❌</button>
@@ -494,7 +477,7 @@
                 elements.timetableCapture.className = "bg-slate-900/80 backdrop-blur-md p-5 rounded-2xl border border-slate-800/80 overflow-x-auto w-full";
                 elements.modalBox.className = "bg-slate-900 rounded-2xl p-6 sm:p-8 max-w-md w-full border border-slate-800 text-white";
                 elements.panelNotes.className = "bg-slate-900/90 p-5 rounded-2xl border border-slate-800 text-white flex flex-col justify-between";
-                elements.filterTitle.className = "text-base font-bold mb-3 text-white"; elements.listTitle.className = "text-base font-bold mb-1 text-white"; elements.notesTitle.className = "text-base font-bold mb-1.5 text-white";
+                elements.filterTitle.className = "text-white text-base font-bold mb-3"; elements.listTitle.className = "text-white text-base font-bold mb-1"; elements.notesTitle.className = "text-white text-base font-bold mb-1.5";
             } else {
                 body.className = "bg-slate-50 text-slate-900 font-sans p-3 sm:p-6 md:p-8 transition-colors duration-200 min-h-screen";
                 elements.btnDark.className = "px-4 py-1.5 text-xs font-semibold rounded-xl border border-slate-300 bg-slate-900 text-white cursor-pointer flex items-center gap-1.5 hover:scale-105 transition";
@@ -506,7 +489,7 @@
                 elements.timetableCapture.className = "bg-white p-5 rounded-2xl border border-slate-200/80 overflow-x-auto w-full";
                 elements.modalBox.className = "bg-white rounded-2xl p-6 sm:p-8 max-w-md w-full border border-slate-200 text-slate-900";
                 elements.panelNotes.className = "bg-white p-5 rounded-2xl border border-slate-200/80 text-slate-900 flex flex-col justify-between";
-                elements.filterTitle.className = "text-base font-bold mb-3 text-slate-900"; elements.listTitle.className = "text-base font-bold mb-1 text-slate-900"; elements.notesTitle.className = "text-base font-bold mb-1.5 text-slate-900";
+                elements.filterTitle.className = "text-slate-900 text-base font-bold mb-3"; elements.listTitle.className = "text-slate-900 text-base font-bold mb-1"; elements.notesTitle.className = "text-slate-900 text-base font-bold mb-1.5";
             }
             changeLang(currentLang);
         }
