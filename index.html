@@ -35,7 +35,7 @@
             <p id="txt-subtitle" class="text-sm sm:text-base text-slate-600 font-medium">網格支援【直接點擊】！輕鬆規劃你的完美每週行程！</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
             <div id="panel-filter" class="bg-white p-5 rounded-2xl shadow-md border border-slate-200/80 transition-all flex flex-col justify-between gap-4">
                 <div>
                     <h3 id="txt-filter-title" class="text-base font-bold mb-3 flex items-center gap-2 text-slate-900">⏰ 顯示時間範圍 (24h)</h3>
@@ -52,18 +52,23 @@
                 </div>
                 
                 <div class="border-t border-slate-100 pt-3 flex flex-wrap gap-2">
-                    <button onclick="exportJSON()" id="btn-export" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition cursor-pointer border-none shadow-sm">💾 備份資料 (JSON)</button>
-                    <button onclick="triggerImport()" id="btn-import" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition cursor-pointer border-none shadow-sm">📂 匯入備份</button>
-                    <button onclick="clearAllCourses()" id="btn-clear" class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-bold rounded-xl transition cursor-pointer border-none shadow-sm ml-auto">🗑️ 一鍵清空</button>
+                    <button onclick="exportJSON()" id="btn-export" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold rounded-xl transition cursor-pointer border-none shadow-sm">💾 備份 JSON</button>
+                    <button onclick="triggerImport()" id="btn-import" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold rounded-xl transition cursor-pointer border-none shadow-sm">📂 匯入備份</button>
+                    <button onclick="clearAllCourses()" id="btn-clear" class="px-2.5 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 text-[11px] font-bold rounded-xl transition cursor-pointer border-none shadow-sm ml-auto">🗑️ 清空</button>
                     <input type="file" id="importFile" accept=".json" onchange="importJSON(event)" class="hidden">
                 </div>
             </div>
 
             <div id="panel-list" class="bg-white p-5 rounded-2xl shadow-md border border-slate-200/80 transition-all">
                 <h2 id="txt-list-title" class="text-base font-bold mb-1 text-slate-900">📝 我的每週行程一覽</h2>
-                <p id="txt-list-tip" class="text-[11px] text-slate-400 mb-2 font-medium">💡 點擊可修改。**你可以直接拖曳下面的行程投放到時間表的空白格子中！**</p>
+                <p id="txt-list-tip" class="text-[11px] text-slate-400 mb-2 font-medium">💡 點擊可修改。**可直接拖曳下方清單中的行程投放到時間表空格！**</p>
                 <ul id="courseList" class="space-y-2 max-h-[135px] overflow-y-auto pr-1 text-sm">
                     </ul>
+            </div>
+
+            <div id="panel-notes" class="bg-white p-5 rounded-2xl shadow-md border border-slate-200/80 transition-all w-full flex flex-col justify-between">
+                <h3 id="txt-notes-title" class="text-base font-bold mb-1.5 text-slate-900">📌 本週備忘錄 / 週計畫 To-Do</h3>
+                <textarea id="weeklyNotes" oninput="saveNotes()" rows="4" placeholder="在此輸入本週待辦事項、考試重點或生活備忘錄...（資料會自動儲存）" class="w-full flex-1 p-3 border border-slate-300 rounded-xl bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium text-xs sm:text-sm transition-all resize-none"></textarea>
             </div>
         </div>
 
@@ -90,11 +95,6 @@
                 <div id="timetableRows" class="divide-y divide-slate-100">
                     </div>
             </div>
-        </div>
-
-        <div id="panel-notes" class="bg-white p-5 rounded-2xl shadow-md border border-slate-200/80 transition-all w-full">
-            <h3 id="txt-notes-title" class="text-base font-bold mb-1.5 text-slate-900">📌 本週備忘錄 / 週計畫 To-Do</h3>
-            <textarea id="weeklyNotes" oninput="saveNotes()" rows="4" placeholder="在此輸入本週待辦事項、考試重點或生活備忘錄...（資料會自動儲存）" class="w-full p-3 border border-slate-300 rounded-xl bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium text-sm transition-all"></textarea>
         </div>
     </div>
 
@@ -150,7 +150,7 @@
                 title: "📅 自訂行程時間表",
                 subtitle: "網格支援【直接點擊】！輕鬆規劃你的完美每週行程！",
                 listTitle: "📝 我的每週行程一覽",
-                listTip: "💡 點擊可修改。**你可以直接拖曳下面的行程投放到時間表的空白格子中！**",
+                listTip: "💡 點擊可修改。**可直接拖曳下方清單中的行程投放到時間表空格！**",
                 clashAlert: "⚠️ 同一時段重複加行程會觸發紅色撞時間警告。",
                 screenshot: "📸 下載時間表截圖",
                 time: "時間",
@@ -181,7 +181,7 @@
                 title: "📅 自定义行程时间表",
                 subtitle: "网格支持【直接点击】！轻松规划你的完美每周行程！",
                 listTitle: "📝 我的每周行程一览",
-                listTip: "💡 点击可修改。**你可以直接拖拽下面的行程投放到时间表的空白格子中！**",
+                listTip: "💡 点击可修改。**可直接拖拽下方清单中的行程投放到时间表空格！**",
                 clashAlert: "⚠️ 同一时段重复加行程会触发红色撞时间警告。",
                 screenshot: "📸 下载时间表截图",
                 time: "时间",
@@ -212,7 +212,7 @@
                 title: "📅 Custom Weekly Schedule Planner",
                 subtitle: "Click any grid cell directly to schedule! Plan your perfect week easily!",
                 listTitle: "📝 My Weekly Overview",
-                listTip: "💡 Tip: Click to edit. **You can drag events from the list and drop them onto blank grid cells!**",
+                listTip: "💡 Tip: Click to edit. **Drag events from the list and drop them onto blank grid cells!**",
                 clashAlert: "⚠️ Adding multiple events to the same slot will trigger a red clash warning.",
                 screenshot: "📸 Download Timetable Screenshot",
                 time: "Time",
@@ -348,7 +348,6 @@
             const listTitle = document.getElementById('txt-list-title');
             const panelNotes = document.getElementById('panel-notes');
             const notesTitle = document.getElementById('txt-notes-title');
-            const weeklyNotes = document.getElementById('weeklyNotes');
 
             if (isDarkMode) {
                 body.className = "bg-slate-950 text-white font-sans p-3 sm:p-6 md:p-8 transition-colors duration-200 min-h-screen";
@@ -359,11 +358,11 @@
                 txtSubtitle.className = "text-sm sm:text-base text-slate-200 font-medium";
                 txtClashAlert.className = "text-xs sm:text-sm text-slate-300 font-medium";
 
-                panelFilter.className = "bg-slate-900/90 p-5 rounded-2xl shadow-xl border border-slate-800 text-white transition-all flex flex-col justify-between gap-4";
+                panelFilter.className = "bg-slate-900/90 p-5 rounded-2xl shadow-xl border border-slate-880 text-white transition-all flex flex-col justify-between gap-4";
                 panelList.className = "bg-slate-900/90 p-5 rounded-2xl shadow-xl border border-slate-800 text-white transition-all";
                 timetableCapture.className = "bg-slate-900/80 backdrop-blur-md p-5 rounded-2xl shadow-xl border border-slate-800/80 overflow-x-auto w-full transition-all";
                 modalBox.className = "bg-slate-900 rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-slate-800 transform transition-all scale-100 text-white";
-                panelNotes.className = "bg-slate-900/90 p-5 rounded-2xl shadow-md border border-slate-800 transition-all w-full text-white";
+                panelNotes.className = "bg-slate-900/90 p-5 rounded-2xl shadow-xl border border-slate-800 transition-all w-full text-white flex flex-col justify-between";
 
                 filterTitle.className = "text-base font-bold mb-3 flex items-center gap-2 text-white";
                 listTitle.className = "text-base font-bold mb-1 text-white";
@@ -387,7 +386,7 @@
                 panelList.className = "bg-white p-5 rounded-2xl shadow-md border border-slate-200/80 text-slate-900 transition-all";
                 timetableCapture.className = "bg-white p-5 rounded-2xl shadow-md border border-slate-200/80 overflow-x-auto w-full transition-all";
                 modalBox.className = "bg-white rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-slate-200 transform transition-all scale-100 text-slate-900";
-                panelNotes.className = "bg-white p-5 rounded-2xl shadow-md border border-slate-200/80 transition-all w-full text-slate-900";
+                panelNotes.className = "bg-white p-5 rounded-2xl shadow-md border border-slate-200/80 transition-all w-full text-slate-900 flex flex-col justify-between";
 
                 filterTitle.className = "text-base font-bold mb-3 flex items-center gap-2 text-slate-900";
                 listTitle.className = "text-base font-bold mb-1 text-slate-900";
@@ -409,9 +408,9 @@
             const allSelectsInputs = document.querySelectorAll('select, input[type="text"], textarea');
             allSelectsInputs.forEach(el => {
                 if (isDarkMode) {
-                    el.className = "w-full px-3 py-2 border rounded-xl bg-white text-slate-950 border-slate-400 font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm";
+                    el.className = "w-full px-3 py-2 border rounded-xl bg-white text-slate-950 border-slate-400 font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm resize-none";
                 } else {
-                    el.className = "w-full px-3 py-2 border rounded-xl bg-white text-slate-900 border-slate-300 font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm";
+                    el.className = "w-full px-3 py-2 border rounded-xl bg-white text-slate-900 border-slate-300 font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm resize-none";
                 }
             });
         }
@@ -576,14 +575,13 @@
             updateUI();
         }
 
-        // --- 拖曳 HTML5 Drag and Drop 核心邏輯 ---
         function handleDragStart(e, id) {
             e.dataTransfer.setData("text/plain", id);
             e.dataTransfer.effectAllowed = "move";
         }
 
         function handleDragOver(e) {
-            e.preventDefault(); // 必須 preventDefault 才能觸發 drop
+            e.preventDefault();
             e.dataTransfer.dropEffect = "move";
         }
 
@@ -593,12 +591,11 @@
             const targetCourse = courses.find(c => c.id === id);
             
             if (targetCourse) {
-                const duration = targetCourse.end - targetCourse.start; // 計算原本行程的時間長度
+                const duration = targetCourse.end - targetCourse.start;
                 targetCourse.day = targetDay;
                 targetCourse.start = targetTime;
-                targetCourse.end = targetTime + duration; // 投放後自動延伸相同的長度
+                targetCourse.end = targetTime + duration;
                 
-                // 如果結束時間超過 24 點則自動做截斷保護
                 if (targetCourse.end > 24) {
                     targetCourse.end = 24;
                 }
@@ -634,7 +631,6 @@
                     const slotCourses = courses.filter(c => c.day == day && time >= c.start && time < c.end).sort((a,b) => a.id - b.id);
                     const cell = document.createElement('div');
                     
-                    // 為每個網格單元格綁定 Drop 投放目的地事件
                     cell.setAttribute('ondragover', 'handleDragOver(event)');
                     cell.setAttribute('ondrop', `handleDrop(event, ${day}, ${time})`);
 
@@ -642,6 +638,7 @@
                         const anyClashInGroup = slotCourses.some(c => checkIsClashed(c));
 
                         if (anyClashInGroup) {
+                            // 當有撞時間發生時，維持並排版面
                             cell.className = 'p-1 flex flex-row items-stretch justify-center gap-1 w-full h-full min-h-[46px]';
                             
                             slotCourses.forEach(c => {
@@ -654,27 +651,35 @@
                                 cell.appendChild(subItem);
                             });
                         } else {
+                            // 【關鍵修正】：當沒有撞時間、只有單個行程時，計算出正確的 span 高度並直接填滿
                             const c = slotCourses[0];
-                            const renderStart = Math.max(c.start, displayStart);
-                            const renderEnd = Math.min(c.end, displayEnd);
-                            const slotsCount = (renderEnd - renderStart) / 0.5;
+                            // 只有當前時間格子剛好是該行程的起點時（或顯示範圍的頂點時），才渲染它並設定 rowspan
+                            if (time === Math.max(c.start, displayStart)) {
+                                const renderStart = Math.max(c.start, displayStart);
+                                const renderEnd = Math.min(c.end, displayEnd);
+                                const slotsCount = (renderEnd - renderStart) / 0.5;
 
-                            cell.style.gridRow = `span ${slotsCount}`;
-                            cell.className = 'p-1 flex flex-col items-stretch justify-center w-full h-full';
+                                cell.style.gridRow = `span ${slotsCount}`;
+                                cell.className = 'p-1 flex flex-col items-stretch justify-center w-full h-full';
 
-                            for (let t = renderStart + 0.5; t < renderEnd; t += 0.5) {
-                                coveredSlots[`${day}-${t}`] = true;
+                                // 標記接下來的所有半小時格子已被佔用，防止重複渲染
+                                for (let t = renderStart + 0.5; t < renderEnd; t += 0.5) {
+                                    coveredSlots[`${day}-${t}`] = true;
+                                }
+
+                                const subItem = document.createElement('div');
+                                const themeColors = colorPalette[c.colorIndex || 0];
+                                const currentThemeClass = isDarkMode ? themeColors.dark : themeColors.light;
+
+                                subItem.className = `w-full h-full border rounded-xl flex items-center justify-center p-2.5 font-bold text-center cursor-pointer shadow-md hover:scale-[1.01] transition-all break-all`;
+                                subItem.classList.add(...currentThemeClass.split(' '));
+                                subItem.innerHTML = `<span>${c.name}</span>`;
+                                subItem.setAttribute('onclick', `openModal(null, null, ${c.id})`);
+                                cell.appendChild(subItem);
+                            } else {
+                                // 如果不是起點，就跳過不處理（因為已經被上面的 span 包裹了）
+                                continue;
                             }
-
-                            const subItem = document.createElement('div');
-                            const themeColors = colorPalette[c.colorIndex || 0];
-                            const currentThemeClass = isDarkMode ? themeColors.dark : themeColors.light;
-
-                            subItem.className = `w-full h-full border rounded-xl flex items-center justify-center p-2.5 font-bold text-center cursor-pointer shadow-md hover:scale-[1.01] transition-all break-all`;
-                            subItem.classList.add(...currentThemeClass.split(' '));
-                            subItem.innerHTML = `<span>${c.name}</span>`;
-                            subItem.setAttribute('onclick', `openModal(null, null, ${c.id})`);
-                            cell.appendChild(subItem);
                         }
                     } else {
                         cell.className = isDarkMode
@@ -756,7 +761,6 @@
                     borderClashClass = isDarkMode ? 'border-red-900/80 bg-red-950/40' : 'border-red-200 bg-red-50/60';
                 }
 
-                // 賦予可拖曳屬性 draggable="true" 以及 DragStart 事件
                 li.setAttribute('draggable', 'true');
                 li.setAttribute('ondragstart', `handleDragStart(event, ${c.id})`);
                 li.className = `flex justify-between items-center p-2 rounded-xl border shadow-sm cursor-move active:opacity-50 transition-all duration-150 ${borderClashClass}`;
