@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>自訂排課與行程時間表 / Schedule & Timetable Planner</title>
+    <title>自訂行程時間表 / Weekly Schedule Planner</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
@@ -24,21 +24,21 @@
         </div>
 
         <div class="text-center mb-6">
-            <h1 id="txt-title" class="text-3xl font-bold text-slate-800 mb-2">📅 自訂排課與行程時間表</h1>
-            <p id="txt-subtitle" class="text-slate-600">網格支援【直接點擊】排課！輕鬆規劃你的完美每週行程！</p>
+            <h1 id="txt-title" class="text-3xl font-bold text-slate-800 mb-2">📅 自訂行程時間表</h1>
+            <p id="txt-subtitle" class="text-slate-600">網格支援【直接點擊】！輕鬆規劃你的完美每週行程！</p>
         </div>
 
         <div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 h-fit xl:col-span-1">
                 <h2 id="txt-list-title" class="text-xl font-bold text-slate-700 mb-2">📝 已加行程清單</h2>
-                <p id="txt-list-tip" class="text-xs text-slate-400 mb-4">💡 提示：點擊右邊課表任意空格即可彈出視窗加入行程。</p>
+                <p id="txt-list-tip" class="text-xs text-slate-400 mb-4">💡 提示：點擊時間表任意空格即可彈出視窗加入行程。</p>
                 <ul id="courseList" class="space-y-2 max-h-96 overflow-y-auto text-xs">
                     </ul>
             </div>
 
             <div class="xl:col-span-3">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
-                    <span id="txt-clash-alert" class="text-xs text-slate-500">⚠️ 同一時段重複加行程會觸發紅色撞堂警告。</span>
+                    <span id="txt-clash-alert" class="text-xs text-slate-500">⚠️ 同一時段重複加行程會觸發紅色撞時間警告。</span>
                     <button onclick="downloadTimetable()" id="btn-screenshot" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition cursor-pointer text-center">
                         📸 下載時間表截圖
                     </button>
@@ -69,7 +69,7 @@
             
             <div class="space-y-4">
                 <div>
-                    <label id="modal-label-name" class="block text-sm font-medium text-slate-600 mb-1">行程 / 課程名稱</label>
+                    <label id="modal-label-name" class="block text-sm font-medium text-slate-600 mb-1">項目 / 行程名稱</label>
                     <input type="text" id="modalCourseName" placeholder="" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
 
@@ -110,45 +110,42 @@
     </div>
 
     <script>
-        // 語言包設定
         const langPack = {
             zh: {
-                title: "📅 自訂排課與行程時間表",
-                subtitle: "網格支援【直接點擊】排課！輕鬆規劃你的完美每週行程！",
+                title: "📅 自訂行程時間表",
+                subtitle: "網格支援【直接點擊】！輕鬆規劃你的完美每週行程！",
                 listTitle: "📝 已加行程清單",
-                listTip: "💡 提示：點擊右邊課表任意空格即可彈出視窗加入行程。",
-                clashAlert: "⚠️ 同一時段重複加行程會觸發紅色撞堂警告。",
+                listTip: "💡 提示：點擊時間表任意空格即可彈出視窗加入行程。",
+                clashAlert: "⚠️ 同一時段重複加行程會觸發紅色撞時間警告。",
                 screenshot: "📸 下載時間表截圖",
                 time: "時間",
                 modalTitle: "➕ 新增行程資料",
-                labelName: "行程 / 課程名稱",
+                labelName: "項目 / 行程名稱",
                 labelDay: "星期幾",
                 labelStart: "開始時間",
                 labelEnd: "結束時間",
                 btnCancel: "取消",
                 btnConfirm: "確認加入",
                 placeholder: "例如: 補習 / 兼職 / MKT2012",
-                clashText: "⚠️ 撞時間!",
                 alertInput: "請輸入名稱！",
                 days: ['', '星期一 (Mon)', '星期二 (Tue)', '星期三 (Wed)', '星期四 (Thu)', '星期五 (Fri)', '星期六 (Sat)', '星期日 (Sun)']
             },
             cn: {
-                title: "📅 自定义排课与行程时间表",
-                subtitle: "网格支持【直接点击】排课！轻松规划你的完美每周行程！",
+                title: "📅 自定义行程时间表",
+                subtitle: "网格支持【直接点击】！轻松规划你的完美每周行程！",
                 listTitle: "📝 已加行程清单",
-                listTip: "💡 提示：点击右边课表任意空格即可弹出视窗加入行程。",
-                clashAlert: "⚠️ 同一时段重复加行程会触发红色撞堂警告。",
+                listTip: "💡 提示：点击时间表任意空格即可弹出视窗加入行程。",
+                clashAlert: "⚠️ 同一时段重复加行程会触发红色撞时间警告。",
                 screenshot: "📸 下载时间表截图",
                 time: "时间",
                 modalTitle: "➕ 新增行程资料",
-                labelName: "行程 / 课程名称",
+                labelName: "项目 / 行程名称",
                 labelDay: "星期几",
                 labelStart: "开始时间",
                 labelEnd: "结束时间",
                 btnCancel: "取消",
                 btnConfirm: "确认加入",
                 placeholder: "例如: 补习 / 兼职 / MKT2012",
-                clashText: "⚠️ 撞时间!",
                 alertInput: "请输入名称！",
                 days: ['', '星期一 (Mon)', '星期二 (Tue)', '星期三 (Wed)', '星期四 (Thu)', '星期五 (Fri)', '星期六 (Sat)', '星期日 (Sun)']
             },
@@ -156,7 +153,7 @@
                 title: "📅 Custom Weekly Schedule Planner",
                 subtitle: "Click any grid cell directly to schedule! Plan your perfect week easily!",
                 listTitle: "📝 Added Schedule List",
-                listTip: "💡 Tip: Click any blank grid cell on the right to add an event.",
+                listTip: "💡 Tip: Click any blank grid cell to add an event.",
                 clashAlert: "⚠️ Adding multiple events to the same slot will trigger a red clash warning.",
                 screenshot: "📸 Download Timetable Screenshot",
                 time: "Time",
@@ -168,7 +165,6 @@
                 btnCancel: "Cancel",
                 btnConfirm: "Confirm & Add",
                 placeholder: "e.g., Study / Part-time / MKT2012",
-                clashText: "⚠️ Clash!",
                 alertInput: "Please enter a name!",
                 days: ['', 'Monday (Mon)', 'Tuesday (Tue)', 'Wednesday (Wed)', 'Thursday (Thu)', 'Friday (Fri)', 'Saturday (Sat)', 'Sunday (Sun)']
             }
@@ -191,12 +187,10 @@
             endSelect.options.add(new Option(formatTime(i + 0.5), i + 0.5));
         }
 
-        // 切換語言核心邏輯
         function changeLang(lang) {
             currentLang = lang;
             const p = langPack[lang];
             
-            // 更新文字
             document.getElementById('txt-title').innerText = p.title;
             document.getElementById('txt-subtitle').innerText = p.subtitle;
             document.getElementById('txt-list-title').innerText = p.listTitle;
@@ -214,7 +208,6 @@
             document.getElementById('btn-modal-confirm').innerText = p.btnConfirm;
             document.getElementById('modalCourseName').placeholder = p.placeholder;
 
-            // 更新按鈕樣式
             ['zh', 'cn', 'en'].forEach(l => {
                 const btn = document.getElementById(`btn-${l}`);
                 if (l === lang) {
@@ -224,7 +217,6 @@
                 }
             });
 
-            // 更新週幾下拉選單文字
             const daySelect = document.getElementById('modalCourseDay');
             for(let i=1; i<=7; i++) {
                 daySelect.options[i-1].text = p.days[i];
@@ -283,18 +275,26 @@
 
                 for (let day = 1; day <= 7; day++) {
                     const cell = document.createElement('div');
-                    const slotCourses = courses.filter(c => c.day == day && time >= c.start && time < c.end);
+                    const slotCourses = courses.filter(c => c.day == day && time >= c.start && time < c.end).sort((a,b) => a.id - b.id);
 
                     if (slotCourses.length > 0) {
+                        cell.className = 'p-0.5 flex items-stretch justify-start gap-0.5 w-full h-full min-h-[40px]';
+                        
                         if (slotCourses.length > 1) {
-                            cell.className = 'p-1 bg-red-50 text-red-700 font-semibold border border-red-300 rounded flex items-center justify-center';
-                            cell.innerHTML = `<span>${langPack[currentLang].clashText}</span>`;
+                            slotCourses.forEach(c => {
+                                const subItem = document.createElement('div');
+                                subItem.className = 'flex-1 bg-red-100 text-red-800 border border-red-300 rounded flex items-center justify-center p-1 font-medium truncate';
+                                subItem.innerHTML = `<span>${c.name}</span>`;
+                                cell.appendChild(subItem);
+                            });
                         } else {
-                            cell.className = 'p-1 bg-blue-50 text-blue-700 border border-blue-100 rounded flex items-center justify-center font-medium';
-                            cell.innerHTML = `<span>${slotCourses[0].name}</span>`;
+                            const subItem = document.createElement('div');
+                            subItem.className = 'flex-1 bg-blue-50 text-blue-700 border border-blue-100 rounded flex items-center justify-center p-1 font-medium truncate';
+                            subItem.innerHTML = `<span>${slotCourses[0].name}</span>`;
+                            cell.appendChild(subItem);
                         }
                     } else {
-                        cell.className = 'p-1 hover:bg-slate-100 text-transparent hover:text-slate-400 transition cursor-pointer flex items-center justify-center border border-dashed border-slate-100 rounded';
+                        cell.className = 'p-1 hover:bg-slate-100 text-transparent hover:text-slate-400 transition cursor-pointer flex items-center justify-center border border-dashed border-slate-100 rounded min-h-[40px]';
                         cell.innerText = '＋';
                         cell.setAttribute('onclick', `openModal(${day}, ${time})`);
                     }
@@ -335,7 +335,6 @@
             });
         }
 
-        // 預設初始化為繁中
         changeLang('zh');
     </script>
 </body>
