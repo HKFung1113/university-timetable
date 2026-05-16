@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>自訂行程時間表 / Weekly Schedule Planner</title>
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1541687790282612" crossorigin="anonymous"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
@@ -23,7 +26,7 @@
         
         <div class="w-full text-center my-2 min-h-[90px] bg-slate-100/50 dark:bg-slate-900/50 rounded-xl flex items-center justify-center border border-dashed border-slate-300 dark:border-slate-700 text-xs text-slate-400">
             廣告贊助 / Advertisements
-            </div>
+        </div>
 
         <div class="flex flex-wrap justify-end items-center gap-3">
             <button onclick="toggleDarkMode()" id="btn-dark" class="px-4 py-1.5 text-xs font-semibold rounded-xl border border-slate-300 bg-slate-900 text-white cursor-pointer flex items-center gap-1.5 shadow-sm hover:scale-105 transition">
@@ -104,7 +107,7 @@
 
         <div class="w-full text-center my-4 min-h-[90px] bg-slate-100/50 dark:bg-slate-900/50 rounded-xl flex items-center justify-center border border-dashed border-slate-300 dark:border-slate-700 text-xs text-slate-400">
             廣告贊助 / Advertisements
-            </div>
+        </div>
 
     </div>
 
@@ -168,7 +171,7 @@
             cn: {
                 title: "📅 自定义行程时间表", subtitle: "网格支持【直接点击】！轻松规划你的完美每周行程！",
                 listTitle: "📝 我的每周行程一览", listTip: "💡 点击行程名称即可进行修改或调整时间。",
-                clashAlert: "⚠️ 同一时段重复加行程会并排大格显示并触发提示。", screenshot: "📸 下载时间表截图", time: "时间",
+                clashAlert: "⚠️ 同时一时段重复加行程会并排大格显示并触发提示。", screenshot: "📸 下载时间表截图", time: "时间",
                 modalTitleAdd: "➕ 新增行程资料", modalTitleEdit: "✏️ 修改行程资料",
                 labelName: "项目 / 行程名称", labelColor: "选择行程颜色", labelDay: "星期几", labelStart: "开始时间", labelEnd: "结束时间",
                 btnCancel: "取消", btnConfirmAdd: "确认加入", btnConfirmEdit: "确认修改", placeholder: "例如: 补习 / 兼职 / 温习",
@@ -382,7 +385,7 @@
                     let endIdx = Math.min(timeTracks.length, (course.end - displayStart) / 0.5);
                     let maxColsInRegion = 1;
                     for (let i = startIdx; i < endIdx; i++) {
-                        maxColsInRegion = Math.max(maxColsInRegion, timeTracks[i].filter(Boolean).length);
+                        maxColsInRegion = Math.max(maxColsInRegion, timeTracks[i].filter(Boolean).length);maxColsInRegion = Math.max(maxColsInRegion, timeTracks[i].filter(Boolean).length);
                     }
                     course._tempMaxCols = maxColsInRegion;
                 });
